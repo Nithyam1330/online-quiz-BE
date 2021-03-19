@@ -10,6 +10,6 @@ export class Role {
   role_id: number;
 }
 
-export type RoleSchemaDocument = Role & Document;
+export type IRole = Role & Document;
 
 export const RoleSchema = SchemaFactory.createForClass(Role).plugin(mongoUniqueValidator);

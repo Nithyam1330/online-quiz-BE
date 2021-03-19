@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
-import { IRole } from './roles.dto';
+import { IRole } from './roles.schema';
 import { RolesService } from './roles.service';
 
 @Controller('roles')
@@ -10,7 +10,7 @@ export class RolesController {
         private readonly responseHandlerService: ResponseHandlerService) {
 
     }
-    @Post('create')
+    @Post('')
     async createRoles(@Body() rolesObj: IRole) {
         return this.rolesService.createRoles(rolesObj).then(res => {
             return this.responseHandlerService.successReponseHandler('Roles Created successfully', res);

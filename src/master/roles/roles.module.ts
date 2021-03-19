@@ -6,7 +6,7 @@ import { RolesProviders } from './roles.providers';
 import { RolesService } from './roles.service';
 
 @Module({
-  imports: [DatabaseModule, SharedModule],
+  imports: [SharedModule],
   providers: [
     RolesService,
     ...RolesProviders

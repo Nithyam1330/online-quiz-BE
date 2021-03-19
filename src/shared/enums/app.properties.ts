@@ -1,0 +1,1 @@
+export const MONGO_DB_CONNECTION_URL = "mongodb+srv://saikumar1330:8125431943@online-meat-nest.wmtkm.mongodb.net/meat-nest?retryWrites=true&w=majority";

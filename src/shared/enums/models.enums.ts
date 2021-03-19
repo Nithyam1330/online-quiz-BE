@@ -1,0 +1,8 @@
+export const MODAL_ENUMS = {
+    ROLE_MODEL: 'ROLE_MODEL',
+    DATABASE_CONNECTION: 'DATABASE_CONNECTION'
+}
+
+export const COLLECTION_NAMES = {
+    ROLES: 'roles'
+}

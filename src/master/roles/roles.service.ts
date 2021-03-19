@@ -2,10 +2,10 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { IRole } from './roles.dto';
-
+import {RoleSchemaDocument} from './roles.schema';
 @Injectable()
 export class RolesService {
-    constructor(@Inject(MODAL_ENUMS.ROLE_MODEL) private rolesModel: Model<IRole>) {
+    constructor(@Inject(MODAL_ENUMS.ROLE_MODEL) private rolesModel: Model<RoleSchemaDocument>) {
         
     }
 

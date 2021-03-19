@@ -1,51 +1,55 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
 import { IRole } from './roles.dto';
 import { RolesService } from './roles.service';
 
 @Controller('roles')
 export class RolesController {
-    constructor(private readonly rolesService: RolesService) {
+    constructor(
+        private readonly rolesService: RolesService,
+        private readonly responseHandlerService: ResponseHandlerService) {
 
     }
     @Post('create')
     async createRoles(@Body() rolesObj: IRole) {
-        console.log(rolesObj);
         return this.rolesService.createRoles(rolesObj).then(res => {
-            return {
-                statusCode: HttpStatus.OK,
-                message: 'Roles Created successfully',
-                data: res
-            }
-        }).catch(error => {
-            console.log(error.errors);
-            if (error && error.errors) {
-                if (error.errors.name) {
-                    if (error.errors.name.kind === 'required') {
-                        return {
-                            statusCode: HttpStatus.BAD_REQUEST,
-                            message: 'name is required',
-                            data: null
-                        }
-                    }
-                }
-                if (error.errors.role_id) {
-                    if (error.errors.role_id.kind === 'unique') {
-                        return {
-                            statusCode: HttpStatus.BAD_REQUEST,
-                            message: 'RoleID must be unique.Role Already Exist',
-                            data: null
-                        }
-                    } else if (error.errors.role_id.kind === 'required') {
-                        return {
-                            statusCode: HttpStatus.BAD_REQUEST,
-                            message: 'RoleID is required',
-                            data: null
-                        }
-                    }
-                }
-            }
+            return this.responseHandlerService.successReponseHandler('Roles Created successfully', res);
+        }).catch((error: Error) => {
+            return this.responseHandlerService.errorReponseHandler(error);
         });
 
+    }
+
+    @Delete(':id')
+    async deleteRole(@Param('id') roleId: string) {
+        return this.rolesService.deleteRoles(roleId).then(role => {
+            return this.responseHandlerService.successReponseHandler('Role id is deleted successfully', role);
+        }).catch((error: Error) => {
+            return this.responseHandlerService.errorReponseHandler(error);
+        })
+    }
+
+
+    @Get()
+    async getRoles() {
+        return this.rolesService.getAllRoles().then((roles: IRole[]) => {
+            return this.responseHandlerService.successReponseHandler('Get All Roles is successfull', roles);
+
+        }).catch((error: Error) => {
+            return this.responseHandlerService.errorReponseHandler(error);
+
+        })
+    }
+
+
+    @Get(':id')
+    async getRolesById(@Param('id') roleId: string) {
+        return this.rolesService.getRoleByRoleId(roleId).then((role: IRole) => {
+            return this.responseHandlerService.successReponseHandler('Get Role By Role id is successfull', role);
+        }).catch((error: Error) => {
+            return this.responseHandlerService.errorReponseHandler(error);
+
+        })
     }
 
 }

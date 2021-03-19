@@ -19,7 +19,7 @@ export class ResponseHandlerService {
         }
     }
 
-    public errorReponseHandler(error: Error = null): ISuccessErrorObjectInterface {
+    public errorReponseHandler(error: Error): ISuccessErrorObjectInterface {
         switch (error.name) {
             case MONGO_ERROR_TYPES.CastError: {
                 return {

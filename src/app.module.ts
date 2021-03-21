@@ -1,14 +1,25 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './auth/user/user.module';
 import { GenderModule } from './master/gender/gender.module';
 import { RolesModule } from './master/roles/roles.module';
+import { SMTP_CONFIG } from './shared/enums/app.properties';
 import { ResponseHandlerService } from './shared/services/response-handler/response-handler.service';
 import { SharedModule } from './shared/shared.module';
 
+
 @Module({
-  imports: [RolesModule, SharedModule, GenderModule, UserModule],
+  imports: [
+    RolesModule,
+    SharedModule,
+    GenderModule,
+    UserModule,
+    MailerModule.forRoot({
+      transport: SMTP_CONFIG
+    })
+  ],
   controllers: [AppController],
   providers: [AppService, ResponseHandlerService],
 })

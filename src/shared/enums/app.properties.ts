@@ -5,3 +5,5 @@ export enum USER_ROLES{
     USER= 'USER'
 }
 export type IUserRoles = typeof USER_ROLES[keyof typeof USER_ROLES];
+
+export const SMTP_CONFIG = "smtps://svsudowindo@gmail.com:8125431943@smtp.gmail.com"

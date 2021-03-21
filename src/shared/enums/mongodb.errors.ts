@@ -10,5 +10,5 @@ export const MONGO_ERROR_TYPES = {
     ValidatorError: 'ValidatorError',
     VersionError: 'VersionError',
     messages: 'messages',
-    
+    MongoError: 'MongoError'
 }

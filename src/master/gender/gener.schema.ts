@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-
+import * as uniqueValidator from 'mongoose-unique-validator'
 @Schema()
 export class Gender {
     @Prop({required: true})
@@ -12,4 +12,4 @@ export class Gender {
 
 export type IGender = Gender & Document;
 
-export const GenderSchema = SchemaFactory.createForClass(Gender);
+export const GenderSchema = SchemaFactory.createForClass(Gender).plugin(uniqueValidator);

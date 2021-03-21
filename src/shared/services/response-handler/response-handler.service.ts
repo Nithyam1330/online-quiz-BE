@@ -40,6 +40,14 @@ export class ResponseHandlerService {
                     errorType: error.name
                 }
             }
+            case MONGO_ERROR_TYPES.MongoError: {
+                return {
+                    statusCode: HttpStatus.BAD_REQUEST,
+                    message: error.message,
+                    data: null,
+                    errorType: error.name
+                }
+            }
             default: {
                 return {
                     statusCode: HttpStatus.UNPROCESSABLE_ENTITY,

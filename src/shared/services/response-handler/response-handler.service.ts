@@ -19,12 +19,27 @@ export class ResponseHandlerService {
         }
     }
 
+    changeHttpErrorToMongooesError(status: HttpStatus) {
+        switch(status) {
+            case HttpStatus.NOT_FOUND: {
+                return MONGO_ERROR_TYPES.DocumentNotFoundError
+            }
+            default: {
+                return ''
+            }
+
+        }
+    }
+
     public errorReponseHandler(error: Error): ISuccessErrorObjectInterface {
+        if (error['status']) {
+            error.name = this.changeHttpErrorToMongooesError(error['status']);
+        }
         switch (error.name) {
             case MONGO_ERROR_TYPES.CastError: {
                 return {
-                    statusCode: HttpStatus.BAD_REQUEST,
-                    message: error.message,
+                    statusCode: HttpStatus.NOT_FOUND,
+                    message: 'Record not found',
                     data: null,
                     errorType: error.name
                 }
@@ -44,6 +59,14 @@ export class ResponseHandlerService {
                 return {
                     statusCode: HttpStatus.BAD_REQUEST,
                     message: error.message,
+                    data: null,
+                    errorType: error.name
+                }
+            }
+            case MONGO_ERROR_TYPES.DocumentNotFoundError: {
+                return {
+                    statusCode: HttpStatus.NOT_FOUND,
+                    message: 'No records found',
                     data: null,
                     errorType: error.name
                 }

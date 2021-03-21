@@ -8,7 +8,8 @@ export const DatabaseProviders = [
     useFactory: (): Promise<typeof mongoose> =>
       mongoose.connect(MONGO_DB_CONNECTION_URL, {
         useUnifiedTopology: true,
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        useFindAndModify: false
       })
   },
 ];

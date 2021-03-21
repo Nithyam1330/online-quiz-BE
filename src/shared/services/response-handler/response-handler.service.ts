@@ -24,6 +24,9 @@ export class ResponseHandlerService {
             case HttpStatus.NOT_FOUND: {
                 return MONGO_ERROR_TYPES.DocumentNotFoundError
             }
+            case HttpStatus.NOT_MODIFIED: {
+                return MONGO_ERROR_TYPES.OverwriteModelError
+            }
             default: {
                 return ''
             }
@@ -67,6 +70,14 @@ export class ResponseHandlerService {
                 return {
                     statusCode: HttpStatus.NOT_FOUND,
                     message: 'No records found',
+                    data: null,
+                    errorType: error.name
+                }
+            }
+            case MONGO_ERROR_TYPES.OverwriteModelError: {
+                return {
+                    statusCode: HttpStatus.NOT_FOUND,
+                    message: 'No Records Modified',
                     data: null,
                     errorType: error.name
                 }

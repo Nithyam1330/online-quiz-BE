@@ -2,11 +2,9 @@ import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put } fr
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
 import { ForgotPasswordDto, UsersDto } from './user.dto';
 import { UserService } from './user.service';
-import * as bcrypt from 'bcrypt';
 import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encrypt-decrypt.service';
 import { EmailSenderService } from 'src/shared/services/email-sender/email-sender.service';
 import { IUserDocument } from './user.schema';
-import { MONGO_ERROR_TYPES } from 'src/shared/enums/mongodb.errors';
 
 @Controller('user')
 export class UserController {
@@ -21,7 +19,6 @@ export class UserController {
     @Post('')
     async createUser(@Body() userPayload: UsersDto) {
         const randomPassword = this.encryptDecryptService.generateRandomPassword();
-        console.log('random password', randomPassword);
         this.emailService.sendMail(
             userPayload.username,
             'Registration with Meat',
@@ -31,10 +28,9 @@ export class UserController {
                 password: randomPassword
             });
         const generatedPassword = await this.encryptDecryptService.generateHashing(randomPassword);
-        console.log('generated hash password', generatedPassword);
         userPayload.password = generatedPassword;
-        // return;
-        return this.userService.createUser(userPayload).then((res: UsersDto) => {
+        return this.userService.createUser(userPayload).then((res: IUserDocument) => {
+            delete res.password;
             return this.responseHandler.successReponseHandler('User Created Succesfully', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);
@@ -43,7 +39,8 @@ export class UserController {
 
     @Get(':id')
     async getUserByUserID(@Param('id') userId: string) {
-        return this.userService.getUserByUserID(userId).then((res: UsersDto) => {
+        return this.userService.getUserByUserID(userId).then((res: IUserDocument) => {
+            delete res.password;
             return this.responseHandler.successReponseHandler('Get User details is succesful', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);
@@ -52,21 +49,20 @@ export class UserController {
 
     @Put('forgot-password')
     async forgotPassword(@Body() passwordBody: ForgotPasswordDto) {
-        return await this.userService.forgotPassword(passwordBody).then(async (res: IUserDocument) => { 
+        return await this.userService.forgotPassword(passwordBody).then(async (res: IUserDocument) => {
             const randomPassword = this.encryptDecryptService.generateRandomPassword();
-            console.log('random password', randomPassword);
             this.emailService.sendMail(
                 passwordBody.username,
-                'Registration with Meat',
-                'Use the below login details',
+                'Your New password',
+                'As per Your request we have updated your password: Please use below credentials',
                 {
                     username: passwordBody.username,
                     password: randomPassword
                 });
             const generatedPassword = await this.encryptDecryptService.generateHashing(randomPassword);
             res['password'] = generatedPassword;
-            return await this.userService.updateUserRecord(res).then(userRes => {
-                return this.responseHandler.successReponseHandler('Password send to your mail id... Please check', res);
+            return this.userService.updateUserRecord(res).then((userRes: IUserDocument) => {
+                return this.responseHandler.successReponseHandler('Password send to your mail id... Please check', userRes);
             })
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);

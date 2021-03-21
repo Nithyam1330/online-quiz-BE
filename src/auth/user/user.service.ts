@@ -17,21 +17,27 @@ export class UserService {
         return createdUser.save();
     }
 
-    async getUserByUserID(userId: string) {
+    async getUserByUserID(userId: string): Promise<IUserDocument> {
         const userDetails = this.userModel.findById(userId).exec();
+        if(!userDetails){
+            throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+        }
         return userDetails;
     }
 
     async forgotPassword(forgotPassword: ForgotPasswordDto): Promise<IUserDocument | NotFoundException> {
         const userDetails = await this.userModel.findOne({username: forgotPassword.username}).exec();
-        console.log(userDetails);
         if(!userDetails) {
             throw new HttpException('Not found', HttpStatus.NOT_FOUND);
         }
         return userDetails;
     }
 
-    async updateUserRecord(recordPayload: IUserDocument): Promise<IUserDocument> {
-        return await this.userModel.findOneAndUpdate({_id: recordPayload._id , recordPayload}).exec();
+    async updateUserRecord(recordPayload: UsersDto): Promise<IUserDocument> {
+        const userDetails = await this.userModel.findOneAndUpdate({_id: recordPayload._id}, {password: recordPayload.password}).exec();
+        if(!userDetails) {
+            throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
+        }
+        return userDetails;
     }
 }

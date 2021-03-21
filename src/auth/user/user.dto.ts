@@ -2,6 +2,8 @@ import { IsDefined, IsEmail, IsIn } from 'class-validator';
 import { USER_ROLES, IUserRoles } from 'src/shared/enums/app.properties';
 import { LoginProvidersType, LOGIN_PROVIDERS } from "src/shared/enums/login-providers.enums";
 export class UsersDto {
+    _id?: string;
+
     @IsDefined()
     @IsEmail()
     username: string;

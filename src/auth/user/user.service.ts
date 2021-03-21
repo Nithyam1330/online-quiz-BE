@@ -33,7 +33,7 @@ export class UserService {
         return userDetails;
     }
 
-    async updateUserRecord(recordPayload: UsersDto): Promise<IUserDocument> {
+    async updateUserPassword(recordPayload: UsersDto): Promise<IUserDocument> {
         const userDetails = await this.userModel.findOneAndUpdate({_id: recordPayload._id}, {password: recordPayload.password}).exec();
         if(!userDetails) {
             throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);

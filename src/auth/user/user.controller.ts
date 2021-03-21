@@ -61,7 +61,7 @@ export class UserController {
                 });
             const generatedPassword = await this.encryptDecryptService.generateHashing(randomPassword);
             res['password'] = generatedPassword;
-            return this.userService.updateUserRecord(res).then((userRes: IUserDocument) => {
+            return this.userService.updateUserPassword(res).then((userRes: IUserDocument) => {
                 return this.responseHandler.successReponseHandler('Password send to your mail id... Please check', userRes);
             })
         }).catch((error: Error) => {

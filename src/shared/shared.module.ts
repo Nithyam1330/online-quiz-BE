@@ -6,7 +6,16 @@ import { ResponseHandlerService } from './services/response-handler/response-han
 
 @Module({
     imports: [DatabaseModule],
-    providers: [ResponseHandlerService, EncryptDecryptService, EmailSenderService],
-    exports: [ResponseHandlerService, DatabaseModule, EncryptDecryptService, EmailSenderService]
+    providers: [
+        ResponseHandlerService,
+        EncryptDecryptService,
+        EmailSenderService
+    ],
+    exports: [
+        ResponseHandlerService,
+        DatabaseModule,
+        EncryptDecryptService,
+        EmailSenderService,
+    ]
 })
-export class SharedModule {}
+export class SharedModule { }

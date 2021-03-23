@@ -1,10 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { exception } from 'console';
-import { Error, Model, ObjectId } from 'mongoose';
-import { throwError } from 'rxjs';
+import {  Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
-import { MONGO_ERROR_TYPES } from 'src/shared/enums/mongodb.errors';
 import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encrypt-decrypt.service';
+import { JwtAuthService } from 'src/shared/services/jwt-auth/jwt-auth.service';
 import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto } from './user.dto';
 import { IUserDocument } from './user.schema';
 
@@ -12,7 +10,8 @@ import { IUserDocument } from './user.schema';
 export class UserService {
     constructor(
         @Inject(MODAL_ENUMS.USERS) private readonly userModel: Model<IUserDocument>,
-        private readonly encryptDecryptService: EncryptDecryptService) {
+        private readonly encryptDecryptService: EncryptDecryptService,
+        private jwtAuthService: JwtAuthService) {
     }
 
     async createUser(userRequest: UsersDto): Promise<IUserDocument> {
@@ -65,7 +64,7 @@ export class UserService {
     }
 
 
-    async login(loginPayload: LoginDTO): Promise<IUserDocument> {
+    async login(loginPayload: LoginDTO): Promise<any> {
         const userDetails = await this.userModel.find({username: loginPayload.username});
         if (userDetails.length <= 0) {
             throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
@@ -74,6 +73,8 @@ export class UserService {
         if (!isPasswordMatches) {
             throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
         }
-        return userDetails[0];
+        const authToken = await this.jwtAuthService.generateJWT(loginPayload);
+        const userWithAuthToken = {...userDetails[0].toObject(), ...authToken};
+        return userWithAuthToken;
     }
 }

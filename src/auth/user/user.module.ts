@@ -3,12 +3,14 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { UserProviders } from './user.provider';
 import { SharedModule } from 'src/shared/shared.module';
+import { JwtAuthModule } from 'src/shared/services/jwt-auth/jwt-auth.module';
 
 @Module({
   providers: [
     UserService,
-  ...UserProviders],
+    ...UserProviders],
   controllers: [UserController],
-  imports: [SharedModule]
+  imports: [SharedModule,JwtAuthModule],
+  exports: [UserService]
 })
-export class UserModule {}
+export class UserModule { }

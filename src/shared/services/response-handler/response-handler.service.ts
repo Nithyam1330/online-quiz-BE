@@ -20,12 +20,15 @@ export class ResponseHandlerService {
     }
 
     changeHttpErrorToMongooesError(status: HttpStatus) {
-        switch(status) {
+        switch (status) {
             case HttpStatus.NOT_FOUND: {
                 return MONGO_ERROR_TYPES.DocumentNotFoundError
             }
             case HttpStatus.NOT_MODIFIED: {
                 return MONGO_ERROR_TYPES.OverwriteModelError
+            }
+            case HttpStatus.NOT_ACCEPTABLE: {
+                return MONGO_ERROR_TYPES.StrictModeError
             }
             default: {
                 return ''
@@ -37,6 +40,9 @@ export class ResponseHandlerService {
     public errorReponseHandler(error: Error): ISuccessErrorObjectInterface {
         if (error['status']) {
             error.name = this.changeHttpErrorToMongooesError(error['status']);
+            if (error['response']) {
+                error.message = error['response']
+            }
         }
         switch (error.name) {
             case MONGO_ERROR_TYPES.CastError: {
@@ -69,7 +75,7 @@ export class ResponseHandlerService {
             case MONGO_ERROR_TYPES.DocumentNotFoundError: {
                 return {
                     statusCode: HttpStatus.NOT_FOUND,
-                    message: 'No records found',
+                    message: error.message ? error.message : 'No records found',
                     data: null,
                     errorType: error.name
                 }
@@ -77,7 +83,15 @@ export class ResponseHandlerService {
             case MONGO_ERROR_TYPES.OverwriteModelError: {
                 return {
                     statusCode: HttpStatus.NOT_FOUND,
-                    message: 'No Records Modified',
+                    message: error.message ? error.message : 'No Records Modified',
+                    data: null,
+                    errorType: error.name
+                }
+            }
+            case MONGO_ERROR_TYPES.StrictModeError: {
+                return {
+                    statusCode: HttpStatus.NOT_ACCEPTABLE,
+                    message: error.message ? error.message : 'Not acceptable request',
                     data: null,
                     errorType: error.name
                 }

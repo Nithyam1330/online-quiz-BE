@@ -10,12 +10,16 @@ export class EmailSenderService {
     constructor(private readonly mailerService: MailerService) {
 
     }
-    sendMail(toEmail: string, subjectInput: string, textOtherThanCredentials: string, sendCredentials: ICredentials) {
+    sendMail(toEmail: string, subjectInput: string, textOtherThanCredentials: string, sendCredentials?: ICredentials) {
+        let message = textOtherThanCredentials;
+        if (sendCredentials) {
+            message = `${textOtherThanCredentials} \nUsername: ${sendCredentials.username} \nPassword: ${sendCredentials.password}`
+        }
         this.mailerService.sendMail({
             to: toEmail,
             from: 'svsudowindo@gmail.com',
             subject: subjectInput,
-            text: `${textOtherThanCredentials} \nUsername: ${sendCredentials.username} \nPassword: ${sendCredentials.password}`
+            text: message
         }).then(() => { }).catch(() => { })
     }
 }

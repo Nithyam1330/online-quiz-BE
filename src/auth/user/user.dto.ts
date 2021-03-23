@@ -24,3 +24,15 @@ export class ForgotPasswordDto {
     @IsEmail()
     username: string;
 }
+
+
+export class ResetPasswordDTO {
+    @IsDefined()
+    oldPassword: string;
+
+    @IsDefined()
+    newPassword: string;
+
+    @IsDefined()
+    confirmPassword: string;
+}

@@ -12,3 +12,7 @@ export const MONGO_ERROR_TYPES = {
     messages: 'messages',
     MongoError: 'MongoError'
 }
+
+export const HTTP_ERROR_TYPES = {
+    
+}

@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Error } from 'mongoose';
-import { MONGO_ERROR_TYPES } from 'src/shared/enums/mongodb.errors';
+import { HTTP_ERROR_TYPES, MONGO_ERROR_TYPES } from 'src/shared/enums/mongodb.errors';
 
 export interface ISuccessErrorObjectInterface {
     statusCode: HttpStatus,
@@ -29,6 +29,9 @@ export class ResponseHandlerService {
             }
             case HttpStatus.NOT_ACCEPTABLE: {
                 return MONGO_ERROR_TYPES.StrictModeError
+            }
+            case HttpStatus.UNAUTHORIZED: {
+                return 'UNAUTHORIZED'
             }
             default: {
                 return ''
@@ -96,6 +99,15 @@ export class ResponseHandlerService {
                     errorType: error.name
                 }
             }
+            case HTTP_ERROR_TYPES.UNAUTHORIZED: {
+                return {
+                    statusCode: HttpStatus.UNAUTHORIZED,
+                    message: error.message ? error.message : 'Unauthorized Users',
+                    data: null,
+                    errorType: error.name
+                }
+            }
+            
             default: {
                 return {
                     statusCode: HttpStatus.UNPROCESSABLE_ENTITY,

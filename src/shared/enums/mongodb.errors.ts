@@ -14,5 +14,5 @@ export const MONGO_ERROR_TYPES = {
 }
 
 export const HTTP_ERROR_TYPES = {
-    
+    UNAUTHORIZED: 'UNAUTHORIZED'
 }

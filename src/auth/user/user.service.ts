@@ -5,7 +5,7 @@ import { throwError } from 'rxjs';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { MONGO_ERROR_TYPES } from 'src/shared/enums/mongodb.errors';
 import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encrypt-decrypt.service';
-import { ForgotPasswordDto, ResetPasswordDTO, UsersDto } from './user.dto';
+import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto } from './user.dto';
 import { IUserDocument } from './user.schema';
 
 @Injectable()
@@ -62,5 +62,18 @@ export class UserService {
             throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
         }
         return resetPasswordDetails;
+    }
+
+
+    async login(loginPayload: LoginDTO): Promise<IUserDocument> {
+        const userDetails = await this.userModel.find({username: loginPayload.username});
+        if (userDetails.length <= 0) {
+            throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
+        }
+        const isPasswordMatches = await this.encryptDecryptService.comparePasswords(loginPayload.password ,userDetails[0].password);
+        if (!isPasswordMatches) {
+            throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
+        }
+        return userDetails[0];
     }
 }

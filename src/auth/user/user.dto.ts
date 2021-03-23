@@ -36,3 +36,13 @@ export class ResetPasswordDTO {
     @IsDefined()
     confirmPassword: string;
 }
+
+
+export class LoginDTO {
+    @IsDefined()
+    @IsEmail()
+    username: string;
+
+    @IsDefined()
+    password: string;
+}

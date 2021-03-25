@@ -6,7 +6,7 @@ import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encry
 import { EmailSenderService } from 'src/shared/services/email-sender/email-sender.service';
 import { IUserDocument } from './user.schema';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
-
+import { v4 as uuidv4 } from 'uuid';
 @Controller('user')
 export class UserController {
     constructor(
@@ -17,7 +17,7 @@ export class UserController {
 
     }
 
-    @Post('')
+    @Post('register')
     async createUser(@Body() userPayload: UsersDto) {
         const randomPassword = this.encryptDecryptService.generateRandomPassword();
         this.emailService.sendMail(
@@ -30,6 +30,7 @@ export class UserController {
             });
         const generatedPassword = await this.encryptDecryptService.generateHashing(randomPassword);
         userPayload.password = generatedPassword;
+        userPayload.uid = uuidv4();
         return this.userService.createUser(userPayload).then((res: IUserDocument) => {
             const obj = res.toObject()
             delete obj.password;

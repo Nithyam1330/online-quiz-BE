@@ -17,6 +17,8 @@ export class UsersDto {
     @IsDefined()
     @IsIn(Object.keys(USER_ROLES))
     role: IUserRoles;
+
+    uid: string;
 }
 
 export class ForgotPasswordDto {

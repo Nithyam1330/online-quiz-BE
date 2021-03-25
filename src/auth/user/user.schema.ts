@@ -3,7 +3,9 @@ import { LoginProvidersType } from "src/shared/enums/login-providers.enums";
 import {Document} from 'mongoose'
 import { IUserRoles } from "src/shared/enums/app.properties";
 import * as uniqueValidators from 'mongoose-unique-validator'
-@Schema()
+@Schema({
+    timestamps: true
+})
 export class UserSchemaCreator {
     @Prop({required: true, unique: true})
     username: string;
@@ -16,6 +18,9 @@ export class UserSchemaCreator {
 
     @Prop({required: true})
     role: IUserRoles
+
+    @Prop({required: true})
+    uid: string;
 }
 
 export type IUserDocument = UserSchemaCreator & Document;

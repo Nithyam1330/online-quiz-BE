@@ -12,6 +12,6 @@ export class Gender {
     gender_id: number;
 }
 
-export type IGender = Gender & Document;
+export type IGenderDocument = Gender & Document;
 
 export const GenderSchema = SchemaFactory.createForClass(Gender).plugin(uniqueValidator);

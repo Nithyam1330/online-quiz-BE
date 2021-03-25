@@ -10,6 +10,7 @@ import { SharedModule } from 'src/shared/shared.module';
     ...GenderProviders
   ],
   controllers: [GenderController],
-  imports: [SharedModule]
+  imports: [SharedModule],
+  exports: [GenderService, ...GenderProviders]
 })
 export class GenderModule {}

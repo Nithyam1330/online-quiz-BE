@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
 import { GenderService } from './gender.service';
-import { IGender } from './gener.schema';
+import { IGenderDocument } from './gener.schema';
 
 @Controller('gender')
 export class GenderController {
@@ -11,8 +11,8 @@ export class GenderController {
     }
 
     @Post('')
-    async createGender(@Body() payload: IGender) {
-        return this.genderService.createGender(payload).then((res: IGender) => {
+    async createGender(@Body() payload: IGenderDocument) {
+        return this.genderService.createGender(payload).then((res: IGenderDocument) => {
             return this.responseHandlerService.successReponseHandler('Gender Created Successfully', res);
         }).catch((error: Error) => {
             return this.responseHandlerService.errorReponseHandler(error);
@@ -21,7 +21,7 @@ export class GenderController {
 
     @Get()
     async getAllGendersList() {
-        return this.genderService.getAllGendersList().then((res: IGender[]) => {
+        return this.genderService.getAllGendersList().then((res: IGenderDocument[]) => {
             return this.responseHandlerService.successReponseHandler('Get all genders is successfull', res);
         }).catch((error: Error) => {
             return this.responseHandlerService.errorReponseHandler(error);
@@ -30,7 +30,7 @@ export class GenderController {
 
     @Get(':id')
     async getGenderByID(@Param('id') genderID: string) {
-        return this.genderService.getGenderByID(genderID).then((res: IGender) => {
+        return this.genderService.getGenderByID(genderID).then((res: IGenderDocument) => {
             return this.responseHandlerService.successReponseHandler('Get gender by id is successfull', res);
         }).catch((error: Error) => {
             return this.responseHandlerService.errorReponseHandler(error);
@@ -38,8 +38,8 @@ export class GenderController {
     }
 
     @Patch(':id')
-    async updateGenderByID(@Param('id') genderID: string, @Body() payload: IGender) {
-        return this.genderService.updateGenderByID(genderID, payload).then((res: IGender) => {
+    async updateGenderByID(@Param('id') genderID: string, @Body() payload: IGenderDocument) {
+        return this.genderService.updateGenderByID(genderID, payload).then((res: IGenderDocument) => {
             return this.responseHandlerService.successReponseHandler('Update by ID is successful', res);
         }).catch((error: Error) => {
             return this.responseHandlerService.errorReponseHandler(error);
@@ -48,7 +48,7 @@ export class GenderController {
 
     @Delete(':id')
     async deleteGenderByID(@Param('id') genderID: string) {
-        return this.genderService.deleteGenderByID(genderID).then((res: IGender) => {
+        return this.genderService.deleteGenderByID(genderID).then((res: IGenderDocument) => {
             return this.responseHandlerService.successReponseHandler('Delete by ID is successful', res);
         }).catch((error: Error) => {
             return this.responseHandlerService.errorReponseHandler(error);

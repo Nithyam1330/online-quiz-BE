@@ -28,12 +28,12 @@ export class UserController {
                 username: userPayload.username,
                 password: randomPassword
             });
-        const generatedPassword = await this.encryptDecryptService.generateHashing(randomPassword);
-        userPayload.password = generatedPassword;
+        // const generatedPassword = await this.encryptDecryptService.generateHashing(randomPassword);
+        userPayload.password = randomPassword;
         userPayload.uid = uuidv4();
         return this.userService.createUser(userPayload).then((res: IUserDocument) => {
             const obj = res.toObject()
-            delete obj.password;
+            // delete obj.password;
             return this.responseHandler.successReponseHandler('User Created Succesfully', obj);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);
@@ -63,8 +63,8 @@ export class UserController {
                     username: passwordBody.username,
                     password: randomPassword
                 });
-            const generatedPassword = await this.encryptDecryptService.generateHashing(randomPassword);
-            res['password'] = generatedPassword;
+            // const generatedPassword = await this.encryptDecryptService.generateHashing(randomPassword);
+            res['password'] = randomPassword;
             return this.userService.updateUserPassword(res).then((userRes: IUserDocument) => {
                 return this.responseHandler.successReponseHandler('Password send to your mail id... Please check', userRes);
             })
@@ -94,7 +94,7 @@ export class UserController {
                 res.username,
                 'Login Update',
                 `You have logged in just now at ${new Date()}`);
-                delete res.password;
+                // delete res.password;
             return this.responseHandler.successReponseHandler('Logged in successfully', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);

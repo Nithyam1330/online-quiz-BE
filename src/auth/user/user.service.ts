@@ -28,19 +28,19 @@ export class UserService {
     }
 
     async forgotPassword(forgotPassword: ForgotPasswordDto): Promise<IUserDocument | NotFoundException> {
-        const userDetails = await this.userModel.findOne({ username: forgotPassword.username }).select('-password');
+        const userDetails = await this.userModel.findOne({ username: forgotPassword.username });
         if (!userDetails) {
             throw new HttpException('Not found', HttpStatus.NOT_FOUND);
         }
         return userDetails;
     }
 
-    async updateUserPassword(recordPayload: UsersDto): Promise<IUserDocument> {
-        const userDetails = await this.userModel.findByIdAndUpdate({ _id: recordPayload._id }, { password: recordPayload.password }).select('-password');
+    async updateUserPassword(recordPayload: UsersDto): Promise<UsersDto> {
+        const userDetails = await this.userModel.findByIdAndUpdate({ _id: recordPayload._id }, { password: recordPayload.password });
         if (!userDetails) {
             throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
         }
-        return userDetails;
+        return recordPayload;
     }
 
     async resetPassword(resetPayload: ResetPasswordDTO, userId: string): Promise<IUserDocument> {
@@ -51,12 +51,13 @@ export class UserService {
         if (!userDetails) {
             throw new HttpException('No user found', HttpStatus.NOT_FOUND);
         }
-        const isBothPasswordSame = await this.encryptDecryptService.comparePasswords(resetPayload.oldPassword, userDetails.password);
+        // const isBothPasswordSame = await this.encryptDecryptService.comparePasswords(resetPayload.oldPassword, userDetails.password);
+        const isBothPasswordSame = resetPayload.oldPassword === userDetails.password;
         if (!isBothPasswordSame) {
             throw new HttpException('Existing Password Does not match', HttpStatus.NOT_ACCEPTABLE);
         }
-        const encryptedPassword = await this.encryptDecryptService.generateHashing(resetPayload.newPassword);
-        const resetPasswordDetails = this.userModel.findByIdAndUpdate(userId, { password: encryptedPassword }).select('-password');
+        // const encryptedPassword = await this.encryptDecryptService.generateHashing(resetPayload.newPassword);
+        const resetPasswordDetails = this.userModel.findByIdAndUpdate(userId, { password: resetPayload.newPassword });
         if (!resetPasswordDetails) {
             throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
         }
@@ -69,7 +70,8 @@ export class UserService {
         if (userDetails.length <= 0) {
             throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
         }
-        const isPasswordMatches = await this.encryptDecryptService.comparePasswords(loginPayload.password ,userDetails[0].password);
+        // const isPasswordMatches = await this.encryptDecryptService.comparePasswords(loginPayload.password ,userDetails[0].password);
+        const isPasswordMatches = loginPayload.password === userDetails[0].password;
         if (!isPasswordMatches) {
             throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
         }

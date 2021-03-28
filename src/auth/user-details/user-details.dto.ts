@@ -1,4 +1,4 @@
-import { IsDefined, MinLength, ValidateNested, IsArray } from 'class-validator';
+import { IsDefined, MinLength } from 'class-validator';
 
 export class AddressDTO {
     @IsDefined()
@@ -21,6 +21,8 @@ export class AddressDTO {
 
     @IsDefined()
     pincode: number;
+
+    address_id?: string;
 }
 export class UsersDetailsDto {
     _id?: string;
@@ -41,9 +43,6 @@ export class UsersDetailsDto {
     @IsDefined()
     gender_id: number;
 
-    @IsArray()
-    @ValidateNested({ each: true })
-    addresses: AddressDTO[];
     userId: string;
     fullName: string;
 }

@@ -12,6 +12,7 @@ export interface IAddress {
     street: string;
     landmark: string;
     pincode: number;
+    address_id?: string;
 }
 @Schema({
     timestamps: true

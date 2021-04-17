@@ -71,9 +71,6 @@ export class UserDetailsService {
         if (allAddress.length <= 0) {
             throw new HttpException('No Records found', HttpStatus.NOT_FOUND);
         }
-        if (allAddress[0].addresses.length <= 0) {
-            throw new HttpException('No Addresses found', HttpStatus.NOT_FOUND);
-        }
         return allAddress[0].addresses;
     }
 
@@ -99,7 +96,7 @@ export class UserDetailsService {
     }
 
     async updateAddressByIndex(userId: string, address_id: string, addressPayload: AddressDTO): Promise<AddressDTO> {
-        addressPayload['address_id']= address_id
+        addressPayload['address_id'] = address_id
         const allAddress = await this.userDetailsModal.findOneAndUpdate(
             {
                 userId: userId,
@@ -124,5 +121,26 @@ export class UserDetailsService {
         }
 
         return addressPayload;
+    }
+
+    async deleteAddressByAddressID(userId: string, address_id: string) {
+        const allAddress = await this.userDetailsModal.findOneAndUpdate(
+            {
+                userId: userId,
+            },
+            {
+                $pull: {
+                    addresses: {
+                        address_id: {
+                            $eq: address_id
+                        }
+                    }
+                }
+            });
+        if (!allAddress) {
+            throw new HttpException('Not modified', HttpStatus.NOT_MODIFIED);
+        }
+        const result = await this.getAllAddress(userId);
+        return result;
     }
 }

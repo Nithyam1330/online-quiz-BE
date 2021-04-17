@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, UseGuards, Get, Put } from '@nestjs/common';
+import { Body, Controller, Param, Post, UseGuards, Get, Put, Delete } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { ISuccessErrorObjectInterface, ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
 import { AddressDTO, UsersDetailsDto } from './user-details.dto';
@@ -70,6 +70,15 @@ export class UserDetailsController {
     async updateAddressByIndex(@Param('id') userId: string, @Param('address_id') addressId: string, @Body() addressPayload: AddressDTO): Promise<ISuccessErrorObjectInterface> {
         return this.userDetailsService.updateAddressByIndex(userId, addressId, addressPayload).then(res => {
             return this.responseHandlerService.successReponseHandler('Update address details is successful', res);
+        }).catch((error: Error) => {
+            return this.responseHandlerService.errorReponseHandler(error);
+        });
+    }
+
+    @Delete('address/:address_id')
+    async deleteAddressByAddressID(@Param('id') userId: string, @Param('address_id') addressId: string): Promise<ISuccessErrorObjectInterface> {
+        return this.userDetailsService.deleteAddressByAddressID(userId, addressId).then(res => {
+            return this.responseHandlerService.successReponseHandler('Delete address details is successful', res);
         }).catch((error: Error) => {
             return this.responseHandlerService.errorReponseHandler(error);
         });

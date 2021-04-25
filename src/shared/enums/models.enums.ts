@@ -3,7 +3,8 @@ export const MODAL_ENUMS = {
     DATABASE_CONNECTION: 'DATABASE_CONNECTION',
     GENDER_MODEL: 'GENDER_MODEL',
     USERS: 'USER_MODEL',
-    USER_DETAILS: 'userDetails'
+    USER_DETAILS: 'userDetails',
+    CATEGORIES: 'categories'
 
 }
 
@@ -11,6 +12,7 @@ export const COLLECTION_NAMES = {
     ROLES: 'roles',
     GENDERS: 'genders',
     USERS: 'users',
-    USER_DETAILS: 'userDetails'
+    USER_DETAILS: 'userDetails',
+    CATEGORIES: 'categories'
 
 }

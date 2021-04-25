@@ -6,7 +6,15 @@ export enum USER_ROLES{
     SUPER_ADMIN= 'SUPER_ADMIN',
     USER= 'USER'
 }
+
+export enum STATUS {
+    ACTIVE='ACTIVE',
+    INACTIVE='INACTIVE'
+
+}
 export type IUserRoles = typeof USER_ROLES[keyof typeof USER_ROLES];
+
+export type IStatus = typeof STATUS[keyof typeof STATUS];
 
 export const SMTP_CONFIG = "smtps://svsudowindo@gmail.com:8125431943@smtp.gmail.com";
 

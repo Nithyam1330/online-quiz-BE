@@ -6,4 +6,42 @@ export class Utils {
     static replaceStringSpacesWithHipens(str: String) {
         return str.toLowerCase().replace(/ /gi, "-")
     }
+
+    static isEmpty(input) {
+        if (typeof input === 'undefined') {
+          return true;
+        } else {
+          let lstrTempstring = String(input);
+          lstrTempstring = lstrTempstring.trim();
+          if (lstrTempstring === '' || lstrTempstring === 'undefined') {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+    
+      static isUndefined(input) {
+        if (typeof input === 'undefined') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    
+      static isNull(input) {
+        if (input != null) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+
+    static isValidInput(input) {
+        if (Utils.isNull(input) || Utils.isUndefined(input) || Utils.isEmpty(input)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

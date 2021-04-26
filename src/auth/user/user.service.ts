@@ -3,6 +3,7 @@ import {  Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encrypt-decrypt.service';
 import { JwtAuthService } from 'src/shared/services/jwt-auth/jwt-auth.service';
+import { Utils } from 'src/shared/services/Utils/Utils';
 import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto } from './user.dto';
 import { IUserDocument } from './user.schema';
 
@@ -44,6 +45,10 @@ export class UserService {
     }
 
     async resetPassword(resetPayload: ResetPasswordDTO, userId: string): Promise<IUserDocument> {
+
+        if (!Utils.isValidInput(resetPayload.newPassword) || !Utils.isValidInput(resetPayload.confirmPassword)) {
+            throw new HttpException('New password and confirm password are mandatory and required', HttpStatus.NOT_ACCEPTABLE);
+        }
         if (resetPayload.newPassword !== resetPayload.confirmPassword) {
             throw new HttpException('New password and confirm password are not matching each other', HttpStatus.NOT_ACCEPTABLE);
         }

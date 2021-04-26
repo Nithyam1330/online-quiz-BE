@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { IStatus } from 'src/shared/enums/app.properties';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
-import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encrypt-decrypt.service';
 import { Utils } from 'src/shared/services/Utils/Utils';
 import { CreateCategoryDto, FilterCategoryByStatusDTO } from './category.dto';
 import { ICategoryDocument } from './category.schema';
@@ -48,6 +47,9 @@ export class CategoryService {
 
     async getCategoryByCategoryKey(categoryKey: string): Promise<CreateCategoryDto> {
         const categoryDetails = await this.categoryModel.find({categoryKey: categoryKey}).exec();
+        if (categoryDetails.length <= 0) {
+            throw new HttpException('Category Not Found', HttpStatus.NOT_FOUND);
+        }
         return categoryDetails[0];
     }
 }

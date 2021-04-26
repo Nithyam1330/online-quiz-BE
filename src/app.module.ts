@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CategoryModule } from './auth/admin/category/category.module';
+import { SubCategoryModule } from './auth/admin/sub-category/sub-category.module';
 import { UserDetailsModule } from './auth/user-details/user-details.module';
 import { UserModule } from './auth/user/user.module';
 import { GenderModule } from './master/gender/gender.module';
@@ -20,6 +21,7 @@ import { SharedModule } from './shared/shared.module';
     UserModule,
     UserDetailsModule,
     CategoryModule,
+    SubCategoryModule,
     MailerModule.forRoot({
       transport: SMTP_CONFIG
     })

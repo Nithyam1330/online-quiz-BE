@@ -11,6 +11,8 @@ import { JwtAuthModule } from 'src/shared/services/jwt-auth/jwt-auth.module';
     ...CategoryProviders
   ],
   controllers: [CategoryController],
-  imports: [SharedModule,JwtAuthModule]
+  imports: [SharedModule,JwtAuthModule],
+  exports: [ CategoryService,
+    ...CategoryProviders]
 })
 export class CategoryModule { }

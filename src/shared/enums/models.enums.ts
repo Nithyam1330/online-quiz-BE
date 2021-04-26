@@ -4,7 +4,8 @@ export const MODAL_ENUMS = {
     GENDER_MODEL: 'GENDER_MODEL',
     USERS: 'USER_MODEL',
     USER_DETAILS: 'userDetails',
-    CATEGORIES: 'categories'
+    CATEGORIES: 'categories',
+    SUB_CATEGORIES: 'subcategories'
 
 }
 
@@ -13,6 +14,7 @@ export const COLLECTION_NAMES = {
     GENDERS: 'genders',
     USERS: 'users',
     USER_DETAILS: 'userDetails',
-    CATEGORIES: 'categories'
+    CATEGORIES: 'categories',
+    SUB_CATEGORIES: 'subcategories'
 
 }

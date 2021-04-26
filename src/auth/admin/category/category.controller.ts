@@ -35,7 +35,7 @@ export class CategoryController {
     @Put(':categoryKey/:status')
     async updateStatus(@Param('categoryKey') categoryKey: string, @Param('status') status: IStatus) {
         return this.categoryService.updateStatus(categoryKey, status).then(res => {
-            return this.responseHandler.successReponseHandler('Category Created Successfully', res);
+            return this.responseHandler.successReponseHandler('Category Status Updated Successfully', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);
         })

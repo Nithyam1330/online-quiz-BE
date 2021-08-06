@@ -20,8 +20,8 @@ import { SharedModule } from './shared/shared.module';
     GenderModule,
     UserModule,
     UserDetailsModule,
-    CategoryModule,
-    SubCategoryModule,
+    // CategoryModule,
+    // SubCategoryModule,
     MailerModule.forRoot({
       transport: SMTP_CONFIG
     })

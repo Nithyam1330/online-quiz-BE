@@ -5,7 +5,9 @@ export const MODAL_ENUMS = {
     USERS: 'USER_MODEL',
     USER_DETAILS: 'userDetails',
     CATEGORIES: 'categories',
-    SUB_CATEGORIES: 'subcategories'
+    SUB_CATEGORIES: 'subcategories',
+    TECHNOLOGIES: 'technologies',
+    QUESTIONS: 'questions',
 
 }
 
@@ -15,6 +17,8 @@ export const COLLECTION_NAMES = {
     USERS: 'users',
     USER_DETAILS: 'userDetails',
     CATEGORIES: 'categories',
-    SUB_CATEGORIES: 'subcategories'
+    SUB_CATEGORIES: 'subcategories',
+    TECHNOLOGIES: 'technologies',
+    QUESTIONS: 'questions',
 
 }

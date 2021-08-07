@@ -12,7 +12,6 @@ export enum USER_ROLES{
 export enum STATUS {
     ACTIVE='ACTIVE',
     INACTIVE='INACTIVE'
-
 }
 export type IUserRoles = typeof USER_ROLES[keyof typeof USER_ROLES];
 

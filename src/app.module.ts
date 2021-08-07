@@ -1,3 +1,4 @@
+import { CurrentOpeningsModule } from './auth/admin/current-openings/current-openings.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -24,6 +25,7 @@ import { SharedModule } from './shared/shared.module';
     UserDetailsModule,
     QuestionsModule,
     TechnologyModule,
+    CurrentOpeningsModule,
     // CategoryModule,
     // SubCategoryModule,
     MailerModule.forRoot({

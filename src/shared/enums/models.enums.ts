@@ -8,7 +8,7 @@ export const MODAL_ENUMS = {
     SUB_CATEGORIES: 'subcategories',
     TECHNOLOGIES: 'technologies',
     QUESTIONS: 'questions',
-
+    CURRENT_OPENINGS: 'currentOpenings'
 }
 
 export const COLLECTION_NAMES = {
@@ -20,5 +20,5 @@ export const COLLECTION_NAMES = {
     SUB_CATEGORIES: 'subcategories',
     TECHNOLOGIES: 'technologies',
     QUESTIONS: 'questions',
-
+    CURRENT_OPENINGS: 'currentOpenings'
 }

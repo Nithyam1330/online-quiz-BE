@@ -27,5 +27,9 @@ export class TechnologyService {
         return result;
     }
 
+    async getTechnologyById(technologyId: string): Promise<ITechnologyDocument[] | NotFoundException> {
+        const result = await this.technologyModel.find({technologyKey: technologyId}).exec();
+        return result;
+    }
 
 }

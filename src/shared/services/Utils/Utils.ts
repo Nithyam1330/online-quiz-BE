@@ -7,6 +7,10 @@ export class Utils {
         return str.toLowerCase().replace(/ /gi, "-")
     }
 
+    static replaceAllSpecialCharactersWithHipens(str: string): string {
+      return str.toLowerCase().replace(/[^a-zA-Z]/g, "-")
+    }
+
     static isEmpty(input) {
         if (typeof input === 'undefined') {
           return true;

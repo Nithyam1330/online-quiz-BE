@@ -3,7 +3,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CategoryModule } from './auth/admin/category/category.module';
+import { QuestionsModule } from './auth/admin/questions/questions.module';
 import { SubCategoryModule } from './auth/admin/sub-category/sub-category.module';
+import { TechnologyModule } from './auth/admin/technology/technology.module';
 import { UserDetailsModule } from './auth/user-details/user-details.module';
 import { UserModule } from './auth/user/user.module';
 import { GenderModule } from './master/gender/gender.module';
@@ -20,6 +22,8 @@ import { SharedModule } from './shared/shared.module';
     GenderModule,
     UserModule,
     UserDetailsModule,
+    QuestionsModule,
+    TechnologyModule,
     // CategoryModule,
     // SubCategoryModule,
     MailerModule.forRoot({

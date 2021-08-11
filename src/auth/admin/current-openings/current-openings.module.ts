@@ -16,6 +16,10 @@ import { JwtAuthModule } from 'src/shared/services/jwt-auth/jwt-auth.module';
         SharedModule,
         JwtAuthModule,
         TechnologyModule
+    ],
+    exports: [
+        CurrentOpeningsService,
+        ...CurrentOpeningsProviders
     ]
 })
 export class CurrentOpeningsModule { }

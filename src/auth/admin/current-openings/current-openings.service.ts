@@ -107,4 +107,16 @@ export class CurrentOpeningsService {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
+
+    async incrementScheduledCount(id: string): Promise<CurrentOpeningsDto | UnprocessableEntityException | NotFoundException> {
+        try {
+            const currentOpeningsData = await this.currentOpeningsModel.findByIdAndUpdate({_id :id}, {$inc : {scheduledCount:1 }}).exec();
+            if (!currentOpeningsData) {
+                throw new HttpException('Nothing has udpated', HttpStatus.NOT_MODIFIED);
+            }          
+            return currentOpeningsData;
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
 }

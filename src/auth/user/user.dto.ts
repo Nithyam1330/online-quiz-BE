@@ -1,18 +1,26 @@
+/* eslint-disable prettier/prettier */
 import { IsDefined, IsEmail, IsIn } from 'class-validator';
 import { USER_ROLES, IUserRoles } from 'src/shared/enums/app.properties';
-import { LoginProvidersType, LOGIN_PROVIDERS } from "src/shared/enums/login-providers.enums";
+import { IOPENING_STATUS, OPENING_STATUS } from './../../shared/enums/app.properties';
 export class UsersDto {
     _id?: string;
 
     @IsDefined()
     @IsEmail()
-    username: string;
-
-    password: string;
+    email: string;
 
     @IsDefined()
-    @IsIn(Object.keys(LOGIN_PROVIDERS))
-    provider: LoginProvidersType;
+    password: string;
+    
+    @IsDefined()
+    confirmPassword: string;
+
+    @IsDefined()
+    currentOpeningsId: string;
+
+    @IsDefined()
+    @IsIn(Object.keys(OPENING_STATUS))
+    status: IOPENING_STATUS;
 
     @IsDefined()
     @IsIn(Object.keys(USER_ROLES))
@@ -24,7 +32,7 @@ export class UsersDto {
 export class ForgotPasswordDto {
     @IsDefined()
     @IsEmail()
-    username: string;
+    email: string;
 }
 
 
@@ -43,7 +51,7 @@ export class ResetPasswordDTO {
 export class LoginDTO {
     @IsDefined()
     @IsEmail()
-    username: string;
+    email: string;
 
     @IsDefined()
     password: string;

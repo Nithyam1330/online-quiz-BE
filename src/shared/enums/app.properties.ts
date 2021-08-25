@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { EncryptDecryptService } from "../services/encrypt-decrypt/encrypt-decrypt.service";
 
 // export const MONGO_DB_CONNECTION_URL = "mongodb+srv://saikumar1330:8125431943@online-meat-nest.wmtkm.mongodb.net/meat-nest?retryWrites=true&w=majority";
@@ -13,7 +14,18 @@ export enum STATUS {
     ACTIVE='ACTIVE',
     INACTIVE='INACTIVE'
 }
+
+export enum OPENING_STATUS {
+    REQUESTED='REQUESTED',
+    ATTEMPTED = 'ATTEMPTED',
+    REJECTED = 'REJECTED',
+    HIRED = 'HIRED',
+    HOLD = 'HOLD'
+}
 export type IUserRoles = typeof USER_ROLES[keyof typeof USER_ROLES];
+
+export type IOPENING_STATUS = typeof OPENING_STATUS[keyof typeof OPENING_STATUS];
+
 
 export type IStatus = typeof STATUS[keyof typeof STATUS];
 

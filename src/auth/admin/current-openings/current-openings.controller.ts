@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { CurrentOpeningsDto, FilterCurrentOpeningsByStatusDTO } from './current-openings.dto';
 import { CurrentOpeningsService } from './current-openings.service';
 import { Body, Controller, Post, Get, Param, Put, Delete } from '@nestjs/common';

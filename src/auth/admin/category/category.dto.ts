@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsDefined, IsIn } from "class-validator";
 import { IStatus, STATUS } from "src/shared/enums/app.properties";
 

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ITechnologyDocument } from './../technology/technology.schema';
 import { TechnologyService } from './../technology/technology.service';
 import { CurrentOpeningsDto, FilterCurrentOpeningsByStatusDTO } from './current-openings.dto';

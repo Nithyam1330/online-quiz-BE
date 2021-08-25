@@ -1,27 +1,40 @@
-import { Prop, SchemaFactory, Schema } from "@nestjs/mongoose";
-import { LoginProvidersType } from "src/shared/enums/login-providers.enums";
-import {Document} from 'mongoose'
-import { IUserRoles } from "src/shared/enums/app.properties";
-import * as uniqueValidators from 'mongoose-unique-validator'
+/* eslint-disable prettier/prettier */
+import { IsIn } from 'class-validator';
+import { OPENING_STATUS, IOPENING_STATUS } from './../../shared/enums/app.properties';
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { IUserRoles } from 'src/shared/enums/app.properties';
+import * as uniqueValidators from 'mongoose-unique-validator';
 @Schema({
-    timestamps: true
+    timestamps: true,
 })
 export class UserSchemaCreator {
-    @Prop({required: true, unique: true})
-    username: string;
+    @Prop({ required: true, unique: true })
+    email: string;
 
-    @Prop()
+    @Prop({ required: true, unique: true })
+    mobileNumber: string;
+
+    @Prop({ required: true, unique: true })
     password: string;
 
-    @Prop({required: true})
-    provider: LoginProvidersType
+    @Prop({ required: true, unique: true })
+    confirmPassword: string;
 
-    @Prop({required: true})
-    role: IUserRoles
+    @Prop({ required: true })
+    currentOpeningsId: string;
 
-    @Prop({required: true})
+    @Prop({ required: true })
+    role: IUserRoles;
+
+    @Prop({ required: true })
+    status: IOPENING_STATUS;
+
+    @Prop({ required: true })
     uid: string;
 }
 
 export type IUserDocument = UserSchemaCreator & Document;
-export const UsersSchema = SchemaFactory.createForClass(UserSchemaCreator).plugin(uniqueValidators)
+export const UsersSchema = SchemaFactory.createForClass(
+    UserSchemaCreator,
+).plugin(uniqueValidators);

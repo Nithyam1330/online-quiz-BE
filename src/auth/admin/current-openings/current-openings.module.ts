@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { TechnologyModule } from './../technology/technology.module';
 import { CurrentOpeningsProviders } from './current-openings.provider';
 import { CurrentOpeningsService } from './current-openings.service';

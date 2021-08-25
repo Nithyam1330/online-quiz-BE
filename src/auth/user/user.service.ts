@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import {  Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
-import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encrypt-decrypt.service';
+import { CurrentOpeningsService } from './../admin/current-openings/current-openings.service';
 import { JwtAuthService } from 'src/shared/services/jwt-auth/jwt-auth.service';
 import { Utils } from 'src/shared/services/Utils/Utils';
 import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto } from './user.dto';
@@ -11,13 +12,22 @@ import { IUserDocument } from './user.schema';
 export class UserService {
     constructor(
         @Inject(MODAL_ENUMS.USERS) private readonly userModel: Model<IUserDocument>,
-        private readonly encryptDecryptService: EncryptDecryptService,
-        private jwtAuthService: JwtAuthService) {
+        private jwtAuthService: JwtAuthService,
+        private readonly currentOpeningsService: CurrentOpeningsService
+        ) {
     }
 
     async createUser(userRequest: UsersDto): Promise<IUserDocument> {
-        const createdUser = new this.userModel(userRequest);
-        return createdUser.save();
+        if(userRequest.password !== userRequest.confirmPassword) {
+            throw new HttpException('Password and confirm password shoud be equal', HttpStatus.NOT_ACCEPTABLE);
+        }
+        const currentOpenings = await this.currentOpeningsService.getCurrentOpeningsByID(userRequest.currentOpeningsId);
+        if(currentOpenings) {
+            const createdUser = new this.userModel(userRequest);
+            return createdUser.save();
+        }
+        throw new HttpException('Current openings not found', HttpStatus.NOT_FOUND);
+
     }
 
     async getUserByUserID(userId: string): Promise<IUserDocument> {
@@ -29,7 +39,7 @@ export class UserService {
     }
 
     async forgotPassword(forgotPassword: ForgotPasswordDto): Promise<IUserDocument | NotFoundException> {
-        const userDetails = await this.userModel.findOne({ username: forgotPassword.username });
+        const userDetails = await this.userModel.findOne({ email: forgotPassword.email });
         if (!userDetails) {
             throw new HttpException('Not found', HttpStatus.NOT_FOUND);
         }
@@ -71,7 +81,7 @@ export class UserService {
 
 
     async login(loginPayload: LoginDTO): Promise<any> {
-        const userDetails = await this.userModel.find({username: loginPayload.username});
+        const userDetails = await this.userModel.find({email: loginPayload.email});
         if (userDetails.length <= 0) {
             throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
         }

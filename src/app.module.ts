@@ -14,6 +14,7 @@ import { RolesModule } from './master/roles/roles.module';
 import { SMTP_CONFIG } from './shared/enums/app.properties';
 import { ResponseHandlerService } from './shared/services/response-handler/response-handler.service';
 import { SharedModule } from './shared/shared.module';
+import { ScheduleModule } from './auth/admin/schedule/schedule.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { SharedModule } from './shared/shared.module';
     QuestionsModule,
     TechnologyModule,
     CurrentOpeningsModule,
+    ScheduleModule,
     // CategoryModule,
     // SubCategoryModule,
     MailerModule.forRoot({

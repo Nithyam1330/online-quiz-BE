@@ -33,4 +33,9 @@ export class CreateScheduleDto {
 
     @IsDefined()
     cutOff: number
+
+    @IsDefined()
+    submitId: string
+
+    totalScore: number = null;
 }

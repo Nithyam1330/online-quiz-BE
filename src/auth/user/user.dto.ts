@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { IsDefined, IsEmail, IsIn } from 'class-validator';
+import { ArrayMinSize, IsArray, isArray, IsDefined, IsEmail, IsIn, IsNotEmpty } from 'class-validator';
 import { USER_ROLES, IUserRoles } from 'src/shared/enums/app.properties';
-import { IOPENING_STATUS, OPENING_STATUS } from './../../shared/enums/app.properties';
 export class UsersDto {
     _id?: string;
 
@@ -11,9 +10,20 @@ export class UsersDto {
 
     @IsDefined()
     password: string;
+
+    @IsDefined()
+    username: string;
+
+    @IsDefined()
+    experience: number;
     
     @IsDefined()
     confirmPassword: string;
+
+    @IsDefined()
+    @IsArray()
+    @ArrayMinSize(1)
+    skills: Array<string>;
 
     @IsDefined()
     @IsIn(Object.keys(USER_ROLES))

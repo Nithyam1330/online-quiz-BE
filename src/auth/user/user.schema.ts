@@ -13,6 +13,12 @@ export class UserSchemaCreator {
     email: string;
 
     @Prop({ required: true})
+    username: string;
+
+    @Prop({ required: true})
+    experience: number;
+
+    @Prop({ required: true})
     mobileNumber: string;
 
     @Prop({ required: true})
@@ -26,6 +32,9 @@ export class UserSchemaCreator {
 
     @Prop({ required: true })
     uid: string;
+
+    @Prop({required: true})
+    skills: Array<string>
 }
 
 export type IUserDocument = UserSchemaCreator & Document;

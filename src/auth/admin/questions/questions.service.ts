@@ -58,5 +58,20 @@ export class QuestionsService {
 
     }
 
+    async getNNumberofQuestionsByTechnology(technology: string, noOfQuestions: number): Promise<{_id: string}[]> {
+         let questions = await this.questionsModel.aggregate([
+            {$match: {technologyKey: technology}},
+            {$sample: {size: noOfQuestions}},
+            {$project: {_id: 1}}
+          ])
+          if(!questions) {
+            throw new HttpException('Questions not found', HttpStatus.NOT_FOUND);
+          }
+        return questions;
+    }
 
+    async getMultipleQuestionsByIds(questionIds: string[]): Promise<CreateQuestionDto[]> {
+        let questions = await this.questionsModel.find({'_id': { $in: questionIds}},{ question: 1,options: 1, _id: 1 })
+        return questions;
+    }
 }

@@ -35,6 +35,16 @@ export class ScheduleSchemaCreator {
 
     @Prop({required: true})
     cutOff: number 
+
+    @Prop({required: true})
+    submitId: string
+
+    @Prop({default: 'scheduled'})
+    status: string
+
+    @Prop({default: null})
+    totalScore: number
+
 }
 
 export type IScheduleDocument = ScheduleSchemaCreator & Document;

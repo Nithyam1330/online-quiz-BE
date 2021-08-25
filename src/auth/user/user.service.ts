@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import {  Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { CurrentOpeningsService } from './../admin/current-openings/current-openings.service';
 import { JwtAuthService } from 'src/shared/services/jwt-auth/jwt-auth.service';
@@ -14,20 +14,15 @@ export class UserService {
         @Inject(MODAL_ENUMS.USERS) private readonly userModel: Model<IUserDocument>,
         private jwtAuthService: JwtAuthService,
         private readonly currentOpeningsService: CurrentOpeningsService
-        ) {
+    ) {
     }
 
     async createUser(userRequest: UsersDto): Promise<IUserDocument> {
-        if(userRequest.password !== userRequest.confirmPassword) {
+        if (userRequest.password !== userRequest.confirmPassword) {
             throw new HttpException('Password and confirm password shoud be equal', HttpStatus.NOT_ACCEPTABLE);
         }
-        const currentOpenings = await this.currentOpeningsService.getCurrentOpeningsByID(userRequest.currentOpeningsId);
-        if(currentOpenings) {
-            const createdUser = new this.userModel(userRequest);
-            return createdUser.save();
-        }
-        throw new HttpException('Current openings not found', HttpStatus.NOT_FOUND);
-
+        const createdUser = new this.userModel(userRequest);
+        return createdUser.save();
     }
 
     async getUserByUserID(userId: string): Promise<IUserDocument> {
@@ -81,7 +76,7 @@ export class UserService {
 
 
     async login(loginPayload: LoginDTO): Promise<any> {
-        const userDetails = await this.userModel.find({email: loginPayload.email});
+        const userDetails = await this.userModel.find({ email: loginPayload.email });
         if (userDetails.length <= 0) {
             throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
         }
@@ -91,7 +86,7 @@ export class UserService {
             throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
         }
         const authToken = await this.jwtAuthService.generateJWT(loginPayload);
-        const userWithAuthToken = {...userDetails[0].toObject(), ...authToken};
+        const userWithAuthToken = { ...userDetails[0].toObject(), ...authToken };
         return userWithAuthToken;
     }
 }

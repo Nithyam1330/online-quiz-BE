@@ -12,23 +12,17 @@ export class UserSchemaCreator {
     @Prop({ required: true, unique: true })
     email: string;
 
-    @Prop({ required: true, unique: true })
+    @Prop({ required: true})
     mobileNumber: string;
 
-    @Prop({ required: true, unique: true })
+    @Prop({ required: true})
     password: string;
 
-    @Prop({ required: true, unique: true })
+    @Prop({ required: true})
     confirmPassword: string;
 
     @Prop({ required: true })
-    currentOpeningsId: string;
-
-    @Prop({ required: true })
     role: IUserRoles;
-
-    @Prop({ required: true })
-    status: IOPENING_STATUS;
 
     @Prop({ required: true })
     uid: string;

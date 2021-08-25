@@ -34,6 +34,8 @@ export class UserController {
         userPayload.uid = uuidv4();
         return this.userService.createUser(userPayload).then((res: IUserDocument) => {
             const obj = res.toObject();
+            delete obj.password;
+            delete obj.confirmPassword;
             return this.responseHandler.successReponseHandler('User Created Succesfully', obj);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);

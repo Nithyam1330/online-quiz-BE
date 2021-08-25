@@ -16,13 +16,6 @@ export class UsersDto {
     confirmPassword: string;
 
     @IsDefined()
-    currentOpeningsId: string;
-
-    @IsDefined()
-    @IsIn(Object.keys(OPENING_STATUS))
-    status: IOPENING_STATUS;
-
-    @IsDefined()
     @IsIn(Object.keys(USER_ROLES))
     role: IUserRoles;
 

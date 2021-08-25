@@ -1,6 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { IsIn } from 'class-validator';
-import { OPENING_STATUS, IOPENING_STATUS } from './../../shared/enums/app.properties';
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { IUserRoles } from 'src/shared/enums/app.properties';

@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { CurrentOpeningsModule } from './../admin/current-openings/current-openings.module';
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
@@ -12,7 +11,7 @@ import { JwtAuthModule } from 'src/shared/services/jwt-auth/jwt-auth.module';
     UserService,
     ...UserProviders],
   controllers: [UserController],
-  imports: [SharedModule,JwtAuthModule, CurrentOpeningsModule],
+  imports: [SharedModule,JwtAuthModule],
   exports: [UserService, ...UserProviders]
 })
 export class UserModule { }

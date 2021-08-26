@@ -1,7 +1,9 @@
-import { Body, Controller, Post, Get, Param, Put, Delete, Patch } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, Put, Delete, Patch, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
 import { SubmitService } from './submit.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('submit')
 export class SubmitController {
     constructor(
@@ -18,7 +20,7 @@ export class SubmitController {
         })
     }
 
-    @Patch('update-answers/:id')
+    @Put('update-answers/:id')
     async updateSchedule(@Param('id') id: string, @Body() schedulePayload: any) {
         return this.submitService.updateSubmitAnswers(id, schedulePayload).then(res => {
             return this.responseHandler.successReponseHandler('Update answers by id Successfull', res);

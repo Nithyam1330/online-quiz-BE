@@ -45,7 +45,18 @@ export class ScheduleService {
 
     async getAllSchedules(): Promise<CreateScheduleDto[]> {
         try {
-            const scheduleDetails = await this.scheduleModel.find().exec();
+            const scheduleDetails = await this.scheduleModel.find().select({
+                "status": 1,
+                "technologyKeys":1,
+                "_id": 1,
+                "startTime": 1,
+                "endTime": "1970-01-19T20:43:25.885Z",
+                "positionApplied": 1,
+                "candidateId": 1,
+                "totalNoOfQuestions": 1,
+                "submitId":1,
+                "cutOff": 1
+            }).exec();
             return scheduleDetails;
         }
         catch (e) {

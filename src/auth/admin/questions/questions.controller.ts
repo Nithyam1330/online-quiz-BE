@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
+import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
-import { CreateTechnologyDto } from '../technology/technology.dto';
 import { CreateQuestionDto } from './questions.dto';
 import { QuestionsService } from './questions.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('questions')
 export class QuestionsController {
     constructor(

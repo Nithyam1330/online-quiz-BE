@@ -23,55 +23,47 @@ export class QuestionsService {
 
     async getAllQuestions(): Promise<CreateQuestionDto[] | UnprocessableEntityException> {
         try {
-            const questionDetails = await this.questionsModel.find().select('-answerKey').exec();
+            const questionDetails = await this.questionsModel.find().select({ '_id': 1, 'question': 1, 'technologyKey': 1, 'options': 1 }).exec();
             return questionDetails;
         }
         catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
-
     }
 
     async deleteQuestion(questionId: string): Promise<IQuestionDocument | NotFoundException | UnprocessableEntityException> {
-        try {
-            const result = await this.questionsModel.findByIdAndDelete(questionId).exec();
-            return result;
+        const result = await this.questionsModel.findByIdAndDelete(questionId).exec();
+        if (!result) {
+            throw new HttpException('Nothing has Deleted', HttpStatus.NOT_FOUND);
         }
-        catch (e) {
-            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-
+        return result;
     }
 
-    async updateQuestion(questionsPayload: CreateQuestionDto, questionId: string): Promise<CreateQuestionDto | UnprocessableEntityException | NotFoundException> {
-        try {
-            const questionDetails = await this.questionsModel.findOneAndUpdate({ _id: questionId }, questionsPayload).exec();
-            if (!questionDetails) {
-                throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
-            }
-            return questionsPayload;
+    async updateQuestion(questionsPayload: CreateQuestionDto, _id: string): Promise<CreateQuestionDto | UnprocessableEntityException | NotFoundException> {
+        const questionDetails = await this.questionsModel.findOneAndUpdate({ _id: _id }, questionsPayload).exec();
+        if (!questionDetails) {
+            throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
         }
-        catch (e) {
-            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-
+        return questionsPayload;
     }
 
-    async getNNumberofQuestionsByTechnology(technology: string, noOfQuestions: number): Promise<{_id: string}[]> {
-         let questions = await this.questionsModel.aggregate([
-            {$match: {technologyKey: technology}},
-            {$sample: {size: noOfQuestions}},
-            {$project: {_id: 1}}
-          ])
-          if(!questions) {
+    async getNNumberofQuestionsByTechnology(technology: string, noOfQuestions: number): Promise<{ _id: string }[]> {
+        let questions = await this.questionsModel.aggregate([
+            { $match: { technologyKey: technology } },
+            { $sample: { size: noOfQuestions } },
+            { $project: { _id: 1 } }
+        ])
+        if (!questions) {
             throw new HttpException('Questions not found', HttpStatus.NOT_FOUND);
-          }
+        }
         return questions;
     }
 
     async getMultipleQuestionsByIds(questionIds: string[]): Promise<CreateQuestionDto[]> {
-        let questions = await this.questionsModel.find({'_id': { $in: questionIds}},{ question: 1,options: 1, _id: 1 })
+        let questions = await this.questionsModel.find({ '_id': { $in: questionIds } }, { question: 1, options: 1, _id: 1 })
+        if (!questions) {
+            throw new HttpException('Questions not found', HttpStatus.NOT_FOUND);
+        }
         return questions;
     }
 }

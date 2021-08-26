@@ -1,9 +1,11 @@
-import { Controller, Delete, Get, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
 import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
+import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { ResponseHandlerService } from '../../../shared/services/response-handler/response-handler.service';
 import { CreateTechnologyDto } from './technology.dto';
 import { TechnologyService } from './technology.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('technology')
 export class TechnologyController {
     constructor(
@@ -33,6 +35,15 @@ export class TechnologyController {
     async deleteTechnology(@Param('id') technologyId: string) {
         return this.technologyService.deleteTechnology(technologyId).then(role => {
             return this.responseHandler.successReponseHandler('Technology is deleted successfully', role);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+
+    @Get(':id')
+    async getTechnologyById(@Param('id') technologyId: string) {
+        return this.technologyService.getTechnologyById(technologyId).then(role => {
+            return this.responseHandler.successReponseHandler('Get Technology by ID successful', role);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);
         })

@@ -15,6 +15,8 @@ import { SMTP_CONFIG } from './shared/enums/app.properties';
 import { ResponseHandlerService } from './shared/services/response-handler/response-handler.service';
 import { SharedModule } from './shared/shared.module';
 import { ScheduleModule } from './auth/admin/schedule/schedule.module';
+import { SubmitModule } from './auth/admin/submit/submit.module';
+import { ApplicationsModule } from './auth/admin/applications/applications.module';
 
 
 @Module({
@@ -28,6 +30,8 @@ import { ScheduleModule } from './auth/admin/schedule/schedule.module';
     TechnologyModule,
     CurrentOpeningsModule,
     ScheduleModule,
+    SubmitModule,
+    ApplicationsModule,
     // CategoryModule,
     // SubCategoryModule,
     MailerModule.forRoot({

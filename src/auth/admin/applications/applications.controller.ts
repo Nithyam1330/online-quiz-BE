@@ -1,8 +1,10 @@
-import { Body, Controller, Post, Get, Param, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
 import { ApplicationsDto } from './applications.dto';
 import { ApplicationsService } from './applications.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('applications')
 export class ApplicationsController {
     constructor(

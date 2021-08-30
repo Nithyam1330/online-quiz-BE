@@ -6,6 +6,7 @@ import { ICurrentOpeningsDocument } from './current-openings.schema';
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
+import { STATUS } from 'src/shared/enums/app.properties';
 
 @Injectable()
 export class CurrentOpeningsService {
@@ -59,6 +60,7 @@ export class CurrentOpeningsService {
     }
 
     async getCurrentOpeningsByID(id: string): Promise<CurrentOpeningsDto | UnprocessableEntityException> {
+        await this.checkCurrentOpeningWithActiveStatus(id);
         try {
             const currentOpeningsData = await this.currentOpeningsModel.findById(id).exec();
             return currentOpeningsData;
@@ -68,7 +70,7 @@ export class CurrentOpeningsService {
     }
 
     async updateCurrentOpeningsByID(id: string, currentOpeningsPayload: CurrentOpeningsDto): Promise<CurrentOpeningsDto | UnprocessableEntityException | NotFoundException> {
-       
+
         await this.checkTechnologies(currentOpeningsPayload.technologyKeys);
 
         try {
@@ -83,9 +85,9 @@ export class CurrentOpeningsService {
     }
 
     async updateStatusById(id: string, status: FilterCurrentOpeningsByStatusDTO): Promise<CurrentOpeningsDto | UnprocessableEntityException | NotFoundException> {
-       
+
         try {
-            const currentOpeningsData = await this.currentOpeningsModel.findByIdAndUpdate(id, {status: status.status}).exec();
+            const currentOpeningsData = await this.currentOpeningsModel.findByIdAndUpdate(id, { status: status.status }).exec();
             if (!currentOpeningsData) {
                 throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
             }
@@ -97,7 +99,7 @@ export class CurrentOpeningsService {
     }
 
     async deleteCurrentOpeningsById(id: string): Promise<CurrentOpeningsDto | UnprocessableEntityException | NotFoundException> {
-       
+
         try {
             const currentOpeningsData = await this.currentOpeningsModel.findByIdAndDelete(id).exec();
             if (!currentOpeningsData) {
@@ -110,14 +112,41 @@ export class CurrentOpeningsService {
     }
 
     async incrementScheduledCount(id: string): Promise<CurrentOpeningsDto | UnprocessableEntityException | NotFoundException> {
-        try {
-            const currentOpeningsData = await this.currentOpeningsModel.findByIdAndUpdate({_id :id}, {$inc : {scheduledCount:1 }}).exec();
-            if (!currentOpeningsData) {
-                throw new HttpException('Nothing has udpated', HttpStatus.NOT_MODIFIED);
-            }          
-            return currentOpeningsData;
-        } catch (e) {
-            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        const currentOpeningsData = await this.currentOpeningsModel.findByIdAndUpdate({ _id: id }, { $inc: { scheduledCount: 1 } }).exec();
+        if (!currentOpeningsData) {
+            throw new HttpException('Nothing has udpated', HttpStatus.NOT_MODIFIED);
+        }
+        return currentOpeningsData;
+    }
+
+    async incrementAppliedCount(id: string): Promise<CurrentOpeningsDto | UnprocessableEntityException | NotFoundException> {
+        const currentOpeningsData = await this.currentOpeningsModel.findByIdAndUpdate({ _id: id }, { $inc: { appliedCount: 1 } }).exec();
+        if (!currentOpeningsData) {
+            throw new HttpException('Nothing has udpated', HttpStatus.NOT_MODIFIED);
+        }
+        return currentOpeningsData;
+    }
+
+    async incrementHoldCount(id: string): Promise<CurrentOpeningsDto | UnprocessableEntityException | NotFoundException> {
+        const currentOpeningsData = await this.currentOpeningsModel.findByIdAndUpdate({ _id: id }, { $inc: { onHoldCount: 1 } }).exec();
+        if (!currentOpeningsData) {
+            throw new HttpException('Nothing has udpated', HttpStatus.NOT_MODIFIED);
+        }
+        return currentOpeningsData;
+    }
+
+    async incrementHiredCount(id: string): Promise<CurrentOpeningsDto | UnprocessableEntityException | NotFoundException> {
+        const currentOpeningsData = await this.currentOpeningsModel.findByIdAndUpdate({ _id: id }, { $inc: { onHoldCount: 1 } }).exec();
+        if (!currentOpeningsData) {
+            throw new HttpException('Nothing has udpated', HttpStatus.NOT_MODIFIED);
+        }
+        return currentOpeningsData;
+    }
+
+    async checkCurrentOpeningWithActiveStatus(id: string): Promise<void> {
+        const currentOpeningsData = await this.currentOpeningsModel.find({ _id: id, status: STATUS.ACTIVE }).exec();
+        if (!currentOpeningsData || (currentOpeningsData && !currentOpeningsData.length)) {
+            throw new HttpException('Given current Opening is not active', HttpStatus.NOT_MODIFIED);
         }
     }
 }

@@ -30,10 +30,10 @@ export class ScheduleSchemaCreator {
     @Prop({ default: null})
     quizStartTimeByCandidate: Date 
 
-    @Prop({required: true})
+    @Prop({required: true,min: 10, max:100})
     totalNoOfQuestions: number
 
-    @Prop({required: true})
+    @Prop({required: true, min: 3, max: 100})
     cutOff: number 
 
     @Prop({required: true})

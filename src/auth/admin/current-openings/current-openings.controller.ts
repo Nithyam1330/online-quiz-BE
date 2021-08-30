@@ -1,9 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { CurrentOpeningsDto, FilterCurrentOpeningsByStatusDTO } from './current-openings.dto';
 import { CurrentOpeningsService } from './current-openings.service';
-import { Body, Controller, Post, Get, Param, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
+import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('current-openings')
 export class CurrentOpeningsController {
     constructor(

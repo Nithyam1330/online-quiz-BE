@@ -1,8 +1,10 @@
 import { CreateScheduleDto } from './schedule.dto';
 import { ScheduleService } from './schedule.service';
-import { Body, Controller, Post, Get, Param, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
+import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('schedules')
 export class ScheduleController {
     constructor(

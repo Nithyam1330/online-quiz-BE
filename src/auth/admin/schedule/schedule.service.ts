@@ -43,19 +43,20 @@ export class ScheduleService {
         }
     }
 
-    async getAllSchedules(): Promise<CreateScheduleDto[]> {
+    async getAllSchedules(): Promise<CreateScheduleDto[] | NotFoundException> {
         try {
             const scheduleDetails = await this.scheduleModel.find().select({
                 "status": 1,
                 "technologyKeys":1,
                 "_id": 1,
                 "startTime": 1,
-                "endTime": "1970-01-19T20:43:25.885Z",
+                "endTime": 1,
                 "positionApplied": 1,
                 "candidateId": 1,
                 "totalNoOfQuestions": 1,
                 "submitId":1,
-                "cutOff": 1
+                "cutOff": 1,
+                "assessmentDuration":1,
             }).exec();
             return scheduleDetails;
         }
@@ -87,6 +88,29 @@ export class ScheduleService {
             throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
         }
         return scheduleData;
+    }
+
+    async getAllSchedulesByUserId(id: string): Promise<CreateScheduleDto[] | NotFoundException> {
+        try {
+            const scheduleDetails = await this.scheduleModel.find({candidateId: id}).select({
+                "status": 1,
+                "technologyKeys":1,
+                "_id": 1,
+                "startTime": 1,
+                "endTime": 1,
+                "positionApplied": 1,
+                "candidateId": 1,
+                "totalNoOfQuestions": 1,
+                "submitId":1,
+                "cutOff": 1,
+                "assessmentDuration":1,
+            }).exec();
+            return scheduleDetails;
+        }
+        catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
     }
 
 }

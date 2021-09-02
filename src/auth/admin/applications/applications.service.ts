@@ -14,7 +14,7 @@ export class ApplicationsService {
 
     async applyForOpening(applicationPayload: ApplicationsDto): Promise<ApplicationsDto | NotFoundException | UnprocessableEntityException> {
         await this.currentopeningsService.checkCurrentOpeningWithActiveStatus(applicationPayload.currentOpeningId);
-        await this.checkAlreadyAppliedStatus(applicationPayload.currentOpeningId, applicationPayload.applicantId);
+        await this.checkAlreadyAppliedStatus(applicationPayload.currentOpeningId, applicationPayload.userId);
         await this.currentopeningsService.incrementAppliedCount(applicationPayload.currentOpeningId);
         const application = new this.applicationsModel(applicationPayload);
         return application.save();
@@ -36,7 +36,7 @@ export class ApplicationsService {
     }
 
     async getAllApplicationByUserId(userId: string): Promise<ApplicationsDto[] | UnprocessableEntityException> {
-        const applicationsData = await this.applicationsModel.find({ applicantId: userId }).exec();
+        const applicationsData = await this.applicationsModel.find({ userId: userId }).exec();
         if (!applicationsData) {
             throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
         }

@@ -45,6 +45,10 @@ export class ScheduleSchemaCreator {
     @Prop({default: null})
     totalScore: number
 
+    //In Minutes
+    @Prop({required: true, min: 10, max: 180})
+    assessmentDuration: number
+
 }
 
 export type IScheduleDocument = ScheduleSchemaCreator & Document;

@@ -38,4 +38,8 @@ export class CreateScheduleDto {
     submitId: string
 
     totalScore: number = null;
+
+    @IsDefined()
+    assessmentDuration: number
+
 }

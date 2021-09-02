@@ -66,4 +66,12 @@ export class QuestionsService {
         }
         return questions;
     }
+
+    async getQuestionById(id: string): Promise<CreateQuestionDto | NotFoundException> {
+        const questionDetails = await this.questionsModel.findOne({ _id: id}).select('-answerKey').exec();
+        if (!questionDetails) {
+            throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
+        }
+        return questionDetails;
+    }
 }

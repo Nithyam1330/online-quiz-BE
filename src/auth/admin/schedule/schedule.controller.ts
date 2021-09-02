@@ -56,4 +56,14 @@ export class ScheduleController {
             return this.responseHandler.errorReponseHandler(error);
         })
     }
+
+    @Get('user/:id')
+    async getAllSchedulesByUserId(@Param('id') id: string) {
+        return this.scheduleService.getAllSchedulesByUserId(id).then(res => {
+            return this.responseHandler.successReponseHandler('Schedule by user id Successfull', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+
 }

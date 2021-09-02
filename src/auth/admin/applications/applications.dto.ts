@@ -4,7 +4,7 @@ export class ApplicationsDto {
     _id?: string;
 
     @IsDefined()
-    applicantId: string;
+    userId: string;
 
     @IsDefined()
     currentOpeningId: string;

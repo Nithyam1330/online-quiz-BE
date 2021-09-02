@@ -48,4 +48,13 @@ export class QuestionsController {
             return this.responseHandler.errorReponseHandler(error);
         })
     }
+
+    @Get(':id')
+    async getQuestionByQuestionId(@Param('id') questionId: string) {
+        return this.questionsService.getQuestionById(questionId).then(res => {
+            return this.responseHandler.successReponseHandler('Get Question by ID successful', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
 }

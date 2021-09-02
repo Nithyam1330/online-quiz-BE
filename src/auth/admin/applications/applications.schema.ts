@@ -8,7 +8,7 @@ import * as uniqueValidators from 'mongoose-unique-validator'
 })
 export class ApplicationsSchemaCreator {
     @Prop({ required: true })
-    applicantId: string;
+    userId: string;
 
     @Prop({ required: true })
     currentOpeningId: string;

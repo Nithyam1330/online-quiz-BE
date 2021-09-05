@@ -149,4 +149,15 @@ export class CurrentOpeningsService {
             throw new HttpException('Given current Opening is not active', HttpStatus.NOT_MODIFIED);
         }
     }
+
+    
+    async getCurrentOpeningsByIDList(ids: any): Promise<CurrentOpeningsDto[] | UnprocessableEntityException> {
+        
+        try {
+            const currentOpeningsData = await this.currentOpeningsModel.find({_id: {$in: ids}});
+            return currentOpeningsData;
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
 }

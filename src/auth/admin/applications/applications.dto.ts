@@ -15,6 +15,9 @@ export class ApplicationsDto {
     @IsDefined()
     @IsIn(Object.keys(APPLICATION_STATUS))
     status: IAPPLICATION_STATUS;
+
+    opening_details?: any;
+    user_details?: any;
 }
 
 

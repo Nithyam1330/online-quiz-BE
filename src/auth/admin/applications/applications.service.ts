@@ -5,12 +5,15 @@ import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { IApplicationsDocument } from './applications.schema';
 import { ApplicationsDto, ApplicationStatusUpdateDTO } from './applications.dto';
 import { CurrentOpeningsService } from '../current-openings/current-openings.service';
+import { UserDetailsService } from 'src/auth/user-details/user-details.service';
+import { UserService } from 'src/auth/user/user.service';
 
 @Injectable()
 export class ApplicationsService {
     constructor(
         @Inject(MODAL_ENUMS.APPLICATIONS) private readonly applicationsModel: Model<IApplicationsDocument>,
-        private currentopeningsService: CurrentOpeningsService
+        private currentopeningsService: CurrentOpeningsService,
+        private usersService: UserService
     ) { }
 
     async applyForOpening(applicationPayload: ApplicationsDto): Promise<ApplicationsDto | NotFoundException | UnprocessableEntityException> {
@@ -23,18 +26,26 @@ export class ApplicationsService {
 
     async checkAlreadyAppliedStatus(currentOpeningId: string, applicantId: string): Promise<void> {
         const applicationDetails = await this.applicationsModel.find({ userId: applicantId, currentOpeningId: currentOpeningId });
-        console.log(applicationDetails);
         if (applicationDetails.length > 0) {
             throw new HttpException(`Already Applied`, HttpStatus.NOT_MODIFIED);
         }
     }
 
-    async getAllApplications(): Promise<ApplicationsDto[] | UnprocessableEntityException> {
+    async getAllApplications(): Promise<any | UnprocessableEntityException> {
         const applicationsData = await this.applicationsModel.find({}).exec();
+        const openingIds = applicationsData.map(obj => obj.currentOpeningId);
+        const openings = await this.currentopeningsService.getCurrentOpeningsByIDList(openingIds);
+        const userIds = applicationsData.map(obj => obj.userId);
+        const users = await this.usersService.getUsersByIds(userIds);
         if (!applicationsData) {
             throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
         }
-        return applicationsData;
+       const payload = {
+           applicationInfo: applicationsData,
+           user_details:users,
+           opening_details: openings
+       }
+        return payload;
     }
 
     async getAllApplicationByUserId(userId: string): Promise<ApplicationsDto[] | UnprocessableEntityException> {

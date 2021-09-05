@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
@@ -28,10 +29,9 @@ export class SubmitService {
     async updateSubmitAnswers(id: string, questions: any): Promise<CreateSubmitDto | NotFoundException> {
         const submitDetails = await this.submitModel.findById(id).exec();
         if (submitDetails && submitDetails.questions) {
-            let updatedQuestions = { ...submitDetails.questions, ...questions };
+            const updatedQuestions = { ...submitDetails.questions, ...questions };
             const scheduleDetails = await this.submitModel.findOneAndUpdate({ _id: id }, { questions: updatedQuestions }).exec();
             if (!scheduleDetails) {
-                console.log(scheduleDetails)
                 throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
             }
             scheduleDetails.questions = updatedQuestions;
@@ -42,9 +42,9 @@ export class SubmitService {
 
     async getSubmitById(id: string): Promise<CreateQuestionDto[]> {
         const submitData = await this.submitModel.findById(id).exec();
-        let questions = await this.questionService.getMultipleQuestionsByIds(Object.keys(submitData.questions))
-        let updatedQuestions = [];
-        for (let question of questions) {
+        const questions = await this.questionService.getMultipleQuestionsByIds(Object.keys(submitData.questions))
+        const updatedQuestions = [];
+        for (const question of questions) {
             updatedQuestions.push({ answerValue: submitData.questions[question._id], options: question.options, question: question.question, _id: question._id })
         } if (!updatedQuestions) {
             throw new HttpException(`Not found`, HttpStatus.NOT_FOUND);

@@ -134,7 +134,7 @@ export class UserService {
     async getUsersByIds(ids: any): Promise<UsersDto[] | UnprocessableEntityException> {
         
         try {
-            const usersList = await this.userModel.find({_id: {$in: ids}});
+            const usersList = await this.userModel.find({_id: {$in: ids}}, {username: 1});
             return usersList;
         } catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);

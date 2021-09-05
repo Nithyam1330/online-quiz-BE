@@ -154,7 +154,7 @@ export class CurrentOpeningsService {
     async getCurrentOpeningsByIDList(ids: any): Promise<CurrentOpeningsDto[] | UnprocessableEntityException> {
         
         try {
-            const currentOpeningsData = await this.currentOpeningsModel.find({_id: {$in: ids}});
+            const currentOpeningsData = await this.currentOpeningsModel.find({_id: {$in: ids}}, {title: 1});
             return currentOpeningsData;
         } catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);

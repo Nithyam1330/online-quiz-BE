@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
@@ -21,7 +22,7 @@ export class ApplicationsService {
     }
 
     async checkAlreadyAppliedStatus(currentOpeningId: string, applicantId: string): Promise<void> {
-        let applicationDetails = await this.applicationsModel.find({ applicantId: applicantId, currentOpeningId: currentOpeningId });
+        const applicationDetails = await this.applicationsModel.find({ applicantId: applicantId, currentOpeningId: currentOpeningId });
         if (applicationDetails) {
             throw new HttpException(`Already Applied`, HttpStatus.NOT_MODIFIED);
         }

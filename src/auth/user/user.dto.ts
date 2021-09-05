@@ -59,3 +59,21 @@ export class LoginDTO {
     @IsDefined()
     password: string;
 }
+
+
+export class UpdateUsersDto {
+
+    @IsDefined()
+    username: string;
+
+    @IsDefined()
+    experience: number;
+
+    @IsDefined()
+    @IsArray()
+    @ArrayMinSize(1)
+    skills: Array<string>;
+
+    @IsDefined()
+    mobileNumber: string;
+}

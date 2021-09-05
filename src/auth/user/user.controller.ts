@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
-import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto } from './user.dto';
+import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto, UpdateUsersDto } from './user.dto';
 import { UserService } from './user.service';
 import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encrypt-decrypt.service';
 import { EmailSenderService } from 'src/shared/services/email-sender/email-sender.service';
@@ -85,6 +85,20 @@ export class UserController {
             //     'Reset Password',
             //     'As per Your request we have updated your password');
             return this.responseHandler.successReponseHandler('Reset Password is successfull', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put('update/:id')
+    async updateUserDetails(@Body() updateBody: UpdateUsersDto, @Param('id') userId: string) {
+        return this.userService.updateUserDetails(updateBody, userId).then((res: IUserDocument) => {
+            // this.emailService.sendMail(
+            //     res.username,
+            //     'Reset Password',
+            //     'As per Your request we have updated your password');
+            return this.responseHandler.successReponseHandler('User Updated successfull', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);
         })

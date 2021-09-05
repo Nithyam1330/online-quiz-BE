@@ -4,8 +4,9 @@ import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { JwtAuthService } from 'src/shared/services/jwt-auth/jwt-auth.service';
 import { Utils } from 'src/shared/services/Utils/Utils';
-import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto } from './user.dto';
+import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto, UpdateUsersDto } from './user.dto';
 import { IUserDocument } from './user.schema';
+
 
 @Injectable()
 export class UserService {
@@ -111,6 +112,19 @@ export class UserService {
             const authToken = await this.jwtAuthService.generateJWT(loginPayload);
             const userWithAuthToken = { ...userDetails[0].toObject(), ...authToken };
             return userWithAuthToken;
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+    }
+
+    async updateUserDetails(recordPayload: UpdateUsersDto, updateId: string): Promise<UpdateUsersDto | UnprocessableEntityException> {
+        try {
+            const userDetails = await this.userModel.findByIdAndUpdate({ _id: updateId }, recordPayload);
+            if (!userDetails) {
+                throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
+            }
+            return recordPayload;
         } catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }

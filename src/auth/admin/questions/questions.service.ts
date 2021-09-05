@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
@@ -60,7 +61,7 @@ export class QuestionsService {
     }
 
     async getMultipleQuestionsByIds(questionIds: string[]): Promise<CreateQuestionDto[]> {
-        let questions = await this.questionsModel.find({ '_id': { $in: questionIds } }, { question: 1, options: 1, _id: 1 })
+        const questions = await this.questionsModel.find({ '_id': { $in: questionIds } }, { question: 1, options: 1, _id: 1 })
         if (!questions) {
             throw new HttpException('Questions not found', HttpStatus.NOT_FOUND);
         }
@@ -68,7 +69,7 @@ export class QuestionsService {
     }
 
     async getQuestionById(id: string): Promise<CreateQuestionDto | NotFoundException> {
-        const questionDetails = await this.questionsModel.findOne({ _id: id}).select('-answerKey').exec();
+        const questionDetails = await this.questionsModel.findOne({ _id: id}).exec();
         if (!questionDetails) {
             throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
         }

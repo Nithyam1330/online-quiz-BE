@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';

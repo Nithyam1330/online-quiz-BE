@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { IsDefined, IsIn } from "class-validator";
+import { APPLICATION_STATUS, IAPPLICATION_STATUS } from './../../../shared/enums/app.properties';
+
 
 export class ApplicationsDto {
     _id?: string;
@@ -9,4 +11,15 @@ export class ApplicationsDto {
 
     @IsDefined()
     currentOpeningId: string;
+
+    @IsDefined()
+    @IsIn(Object.keys(APPLICATION_STATUS))
+    status: IAPPLICATION_STATUS;
+}
+
+
+export class ApplicationStatusUpdateDTO {
+    @IsDefined()
+    @IsIn(Object.keys(APPLICATION_STATUS))
+    status: IAPPLICATION_STATUS;
 }

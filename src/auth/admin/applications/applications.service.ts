@@ -3,7 +3,7 @@ import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, Unpro
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { IApplicationsDocument } from './applications.schema';
-import { ApplicationsDto } from './applications.dto';
+import { ApplicationsDto, ApplicationStatusUpdateDTO } from './applications.dto';
 import { CurrentOpeningsService } from '../current-openings/current-openings.service';
 
 @Injectable()
@@ -14,16 +14,17 @@ export class ApplicationsService {
     ) { }
 
     async applyForOpening(applicationPayload: ApplicationsDto): Promise<ApplicationsDto | NotFoundException | UnprocessableEntityException> {
+        const application = new this.applicationsModel(applicationPayload);
         await this.currentopeningsService.checkCurrentOpeningWithActiveStatus(applicationPayload.currentOpeningId);
         await this.checkAlreadyAppliedStatus(applicationPayload.currentOpeningId, applicationPayload.userId);
         await this.currentopeningsService.incrementAppliedCount(applicationPayload.currentOpeningId);
-        const application = new this.applicationsModel(applicationPayload);
         return application.save();
     }
 
     async checkAlreadyAppliedStatus(currentOpeningId: string, applicantId: string): Promise<void> {
-        const applicationDetails = await this.applicationsModel.find({ applicantId: applicantId, currentOpeningId: currentOpeningId });
-        if (applicationDetails) {
+        const applicationDetails = await this.applicationsModel.find({ userId: applicantId, currentOpeningId: currentOpeningId });
+        console.log(applicationDetails);
+        if (applicationDetails.length > 0) {
             throw new HttpException(`Already Applied`, HttpStatus.NOT_MODIFIED);
         }
     }
@@ -58,6 +59,14 @@ export class ApplicationsService {
             throw new HttpException('Nothing has Deleted', HttpStatus.NOT_FOUND);
         }
         return result;
+    }
+
+    async updateApplicationStatus(applicationId: string, applicationStatusdto: ApplicationStatusUpdateDTO): Promise<ApplicationsDto | UnprocessableEntityException> {
+        const applicationsData = await this.applicationsModel.findOneAndUpdate({_id: applicationId}, {status: applicationStatusdto.status});
+        if (!applicationsData) {
+            throw new HttpException('Unable to update', HttpStatus.NOT_MODIFIED);
+        }
+        return applicationsData;
     }
 }
 

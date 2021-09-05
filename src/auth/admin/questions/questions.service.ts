@@ -49,7 +49,7 @@ export class QuestionsService {
     }
 
     async getNNumberofQuestionsByTechnology(technology: string, noOfQuestions: number): Promise<{ _id: string }[]> {
-        let questions = await this.questionsModel.aggregate([
+        const questions = await this.questionsModel.aggregate([
             { $match: { technologyKey: technology } },
             { $sample: { size: noOfQuestions } },
             { $project: { _id: 1 } }

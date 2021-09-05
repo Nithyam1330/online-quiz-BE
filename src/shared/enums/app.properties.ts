@@ -15,16 +15,17 @@ export enum STATUS {
     INACTIVE='INACTIVE'
 }
 
-export enum OPENING_STATUS {
+export enum APPLICATION_STATUS {
     REQUESTED='REQUESTED',
     ATTEMPTED = 'ATTEMPTED',
     REJECTED = 'REJECTED',
     HIRED = 'HIRED',
-    HOLD = 'HOLD'
+    HOLD = 'HOLD',
+    SCHEDULED ='SCHEDULED'
 }
 export type IUserRoles = typeof USER_ROLES[keyof typeof USER_ROLES];
 
-export type IOPENING_STATUS = typeof OPENING_STATUS[keyof typeof OPENING_STATUS];
+export type IAPPLICATION_STATUS = typeof APPLICATION_STATUS[keyof typeof APPLICATION_STATUS];
 
 
 export type IStatus = typeof STATUS[keyof typeof STATUS];

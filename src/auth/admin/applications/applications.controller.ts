@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Post, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, UseGuards, Put } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
-import { ApplicationsDto } from './applications.dto';
+import { ApplicationsDto, ApplicationStatusUpdateDTO } from './applications.dto';
 import { ApplicationsService } from './applications.service';
 
 @UseGuards(JwtAuthGuard)
@@ -43,6 +43,15 @@ export class ApplicationsController {
     @Get(':id/user')
     async getApplicationsByUserId(@Param('id') userId: string) {
         return this.applicationsService.getAllApplicationByUserId(userId).then(res => {
+            return this.responseHandler.successReponseHandler('Get Applications by opening Id Successfull', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+
+    @Put('update-status/:id')
+    async updateApplicationStatus(@Param('id') applicationId: string, @Body() applicationStatusdto: ApplicationStatusUpdateDTO) {
+        return this.applicationsService.updateApplicationStatus(applicationId, applicationStatusdto).then(res => {
             return this.responseHandler.successReponseHandler('Get Applications by opening Id Successfull', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);

@@ -45,7 +45,7 @@ export class SubmitService {
         const questions = await this.questionService.getMultipleQuestionsByIds(Object.keys(submitData.questions))
         const updatedQuestions = [];
         for (const question of questions) {
-            updatedQuestions.push({ answerValue: submitData.questions[question._id], options: question.options, question: question.question, _id: question._id })
+            updatedQuestions.push({ answerValue: submitData.questions[question._id], options: question.options, question: question.question, _id: question._id, technology: question.technologyKey })
         } if (!updatedQuestions) {
             throw new HttpException(`Not found`, HttpStatus.NOT_FOUND);
         }

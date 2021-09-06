@@ -5,6 +5,7 @@ import { CurrentOpeningsModule } from '../current-openings/current-openings.modu
 import { CurrentOpeningsService } from '../current-openings/current-openings.service';
 import { QuestionsModule } from '../questions/questions.module';
 import { SubmitModule } from '../submit/submit.module';
+import { TechnologyModule } from '../technology/technology.module';
 import { ScheduleController } from './schedule.controller';
 import { ScheduleProviders } from './schedule.provider';
 import { ScheduleService } from './schedule.service';
@@ -15,7 +16,7 @@ import { ScheduleService } from './schedule.service';
     ...ScheduleProviders
   ],
   controllers: [ScheduleController],
-  imports: [SharedModule,JwtAuthModule, CurrentOpeningsModule, SubmitModule, QuestionsModule],
+  imports: [SharedModule,JwtAuthModule, CurrentOpeningsModule, SubmitModule, QuestionsModule, TechnologyModule],
   exports: [ ScheduleService,
     ...ScheduleProviders]
 })

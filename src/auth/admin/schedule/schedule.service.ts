@@ -4,6 +4,7 @@ import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { CurrentOpeningsService } from '../current-openings/current-openings.service';
 import { QuestionsService } from '../questions/questions.service';
 import { SubmitService } from '../submit/submit.service';
+import { TechnologyService } from '../technology/technology.service';
 import { CreateScheduleDto } from './schedule.dto';
 import { IScheduleDocument } from './schedule.schema';
 
@@ -14,6 +15,7 @@ export class ScheduleService {
         private currentOpeningsService: CurrentOpeningsService,
         private submitService: SubmitService,
         private questionsService: QuestionsService,
+        private technologyService: TechnologyService
 
     ) { }
 
@@ -28,6 +30,7 @@ export class ScheduleService {
                 let currentQuestions = await this.questionsService.getNNumberofQuestionsByTechnology(technology, questionsSize);
                 questions = [...questions, ...currentQuestions];
             }
+            console.log('remining',remaining, noOfQuestions, questions.length);
             let formattedQuestions = {};
             for (let question of questions) {
                 formattedQuestions[question._id] = null;
@@ -47,16 +50,16 @@ export class ScheduleService {
         try {
             const scheduleDetails = await this.scheduleModel.find().select({
                 "status": 1,
-                "technologyKeys":1,
+                "technologyKeys": 1,
                 "_id": 1,
                 "startTime": 1,
                 "endTime": 1,
                 "positionApplied": 1,
                 "candidateId": 1,
                 "totalNoOfQuestions": 1,
-                "submitId":1,
+                "submitId": 1,
                 "cutOff": 1,
-                "assessmentDuration":1,
+                "assessmentDuration": 1,
             }).exec();
             return scheduleDetails;
         }
@@ -82,30 +85,44 @@ export class ScheduleService {
         return scheduleDetails;
     }
 
-    async getScheduleById(id: string): Promise<CreateScheduleDto | NotFoundException> {
-        const scheduleData = await this.scheduleModel.findById(id).exec();
-        if (!scheduleData) {
-            throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
+    async getScheduleById(id: string): Promise<any | NotFoundException> {
+        try {
+            const scheduleDetails = await this.scheduleModel.findById(id).exec();
+            const technologyDetails = await this.technologyService.getTechnologiesByIDList(scheduleDetails.technologyKeys);
+            return {
+                scheduleDetails,
+                technologyDetails
+            }
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        return scheduleData;
     }
 
-    async getAllSchedulesByUserId(id: string): Promise<CreateScheduleDto[] | NotFoundException> {
+    async getAllSchedulesByUserId(id: string): Promise<any | NotFoundException> {
         try {
-            const scheduleDetails = await this.scheduleModel.find({candidateId: id}).select({
+
+            const scheduleDetails = await this.scheduleModel.find({ candidateId: id }).select({
                 "status": 1,
-                "technologyKeys":1,
+                "technologyKeys": 1,
                 "_id": 1,
                 "startTime": 1,
                 "endTime": 1,
                 "positionApplied": 1,
                 "candidateId": 1,
                 "totalNoOfQuestions": 1,
-                "submitId":1,
+                "submitId": 1,
                 "cutOff": 1,
-                "assessmentDuration":1,
+                "assessmentDuration": 1,
             }).exec();
-            return scheduleDetails;
+            let technologykeys = []
+            for (let schedule of scheduleDetails) {
+                technologykeys = [...technologykeys, ...schedule.technologyKeys]
+            }
+            const technologyDetails = await this.technologyService.getTechnologiesByIDList(technologykeys);
+            return {
+                scheduleDetails,
+                technologyDetails
+            }
         }
         catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);

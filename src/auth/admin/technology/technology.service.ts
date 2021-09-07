@@ -48,4 +48,15 @@ export class TechnologyService {
         throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 
+    async getTechnologiesByIDList(ids: any): Promise<CreateTechnologyDto[] | UnprocessableEntityException> {
+        try {
+            const technologiesData = await this.technologyModel.find({technologyKey: {$in: ids}}, {name: 1, technologyKey:1});
+            return technologiesData;
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+
+
 }

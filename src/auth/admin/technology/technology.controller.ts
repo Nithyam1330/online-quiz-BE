@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
 import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
@@ -5,7 +6,6 @@ import { ResponseHandlerService } from '../../../shared/services/response-handle
 import { CreateTechnologyDto } from './technology.dto';
 import { TechnologyService } from './technology.service';
 
-@UseGuards(JwtAuthGuard)
 @Controller('technology')
 export class TechnologyController {
     constructor(
@@ -13,6 +13,7 @@ export class TechnologyController {
         private responseHandler: ResponseHandlerService
     ) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post('')
     async createTechnology(@Body() technologyPayload: CreateTechnologyDto) {
         return this.technologyService.createTechnology(technologyPayload).then(res => {
@@ -31,6 +32,7 @@ export class TechnologyController {
         })
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async deleteTechnology(@Param('id') technologyId: string) {
         return this.technologyService.deleteTechnology(technologyId).then(role => {

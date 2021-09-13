@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
@@ -21,21 +22,20 @@ export class ScheduleService {
 
     async createSchedule(schedulePayload: CreateScheduleDto): Promise<CreateScheduleDto> {
         try {
-            let technologiesLength = schedulePayload.technologyKeys.length;
-            let noOfQuestions = Math.floor(schedulePayload.totalNoOfQuestions / technologiesLength);
-            let remaining = schedulePayload.totalNoOfQuestions - (noOfQuestions * technologiesLength);
+            const technologiesLength = schedulePayload.technologyKeys.length;
+            const noOfQuestions = Math.floor(schedulePayload.totalNoOfQuestions / technologiesLength);
+            const remaining = schedulePayload.totalNoOfQuestions - (noOfQuestions * technologiesLength);
             let questions = [];
-            for (let technology of schedulePayload.technologyKeys) {
-                let questionsSize = technology == schedulePayload.technologyKeys[0] ? noOfQuestions + remaining : noOfQuestions;
-                let currentQuestions = await this.questionsService.getNNumberofQuestionsByTechnology(technology, questionsSize);
+            for (const technology of schedulePayload.technologyKeys) {
+                const questionsSize = technology == schedulePayload.technologyKeys[0] ? noOfQuestions + remaining : noOfQuestions;
+                const currentQuestions = await this.questionsService.getNNumberofQuestionsByTechnology(technology, questionsSize);
                 questions = [...questions, ...currentQuestions];
             }
-            console.log('remining',remaining, noOfQuestions, questions.length);
-            let formattedQuestions = {};
-            for (let question of questions) {
+            const formattedQuestions = {};
+            for (const question of questions) {
                 formattedQuestions[question._id] = null;
             }
-            let submitInfo = await this.submitService.createSubmit({ userId: schedulePayload.candidateId, questions: formattedQuestions })
+            const submitInfo = await this.submitService.createSubmit({ userId: schedulePayload.candidateId, questions: formattedQuestions })
             await this.currentOpeningsService.incrementScheduledCount(schedulePayload.positionApplied)
             schedulePayload.submitId = submitInfo._id;
             const schedule = new this.scheduleModel(schedulePayload);
@@ -115,7 +115,7 @@ export class ScheduleService {
                 "assessmentDuration": 1,
             }).exec();
             let technologykeys = []
-            for (let schedule of scheduleDetails) {
+            for (const schedule of scheduleDetails) {
                 technologykeys = [...technologykeys, ...schedule.technologyKeys]
             }
             const technologyDetails = await this.technologyService.getTechnologiesByIDList(technologykeys);

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsDefined, IsIn } from "class-validator";
 import { IStatus, STATUS } from "src/shared/enums/app.properties";
 
@@ -38,4 +39,10 @@ export class FilterCurrentOpeningsByStatusDTO {
     @IsDefined()
     @IsIn(Object.keys(STATUS))
     status: IStatus;
+}
+
+export class CurrentOpeningsByUserDTO {
+    applicationInfo: CurrentOpeningsDto[];
+    updatedIdDetails: any;
+    createdDetails: any
 }

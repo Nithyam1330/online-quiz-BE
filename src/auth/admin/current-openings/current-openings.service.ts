@@ -7,12 +7,17 @@ import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, Unpro
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { STATUS } from 'src/shared/enums/app.properties';
+import { UserService } from 'src/auth/user/user.service';
+import { CurrentOpeningsByUserDTO } from './current-openings.dto';
+
+
 
 @Injectable()
 export class CurrentOpeningsService {
     constructor(
         @Inject(MODAL_ENUMS.CURRENT_OPENINGS) private readonly currentOpeningsModel: Model<ICurrentOpeningsDocument>,
-        private technologyService: TechnologyService
+        private technologyService: TechnologyService,
+        private userService: UserService
     ) { }
 
     async createNewOpenings(currentOpeningsPayload: CurrentOpeningsDto): Promise<CurrentOpeningsDto | NotFoundException | UnprocessableEntityException> {
@@ -41,19 +46,41 @@ export class CurrentOpeningsService {
         }
     }
 
-    async getAllCurrentOpeningsByFilter(filterPayload: FilterCurrentOpeningsByStatusDTO): Promise<CurrentOpeningsDto[]> {
+    async getAllCurrentOpeningsByFilter(filterPayload: FilterCurrentOpeningsByStatusDTO): Promise<CurrentOpeningsByUserDTO> {
         try {
             const currentOpeningsData = await this.currentOpeningsModel.find({ status: filterPayload.status }).exec();
-            return currentOpeningsData;
+            const currentOpenings:CurrentOpeningsByUserDTO = {
+                applicationInfo: currentOpeningsData,
+                updatedIdDetails: null,
+                createdDetails: null
+            }
+            if(currentOpeningsData.length > 0) {
+                const updatedByIds = currentOpeningsData.map(obj => obj.updatedBy);
+                currentOpenings.updatedIdDetails = await this.userService.getUsersByIds(updatedByIds);
+                const createdByIds = currentOpeningsData.map(obj => obj.createdBy);
+                currentOpenings.createdDetails = await this.userService.getUsersByIds(createdByIds);
+            }
+            return currentOpenings;
         } catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
-    async getAllCurrentOpenings(): Promise<CurrentOpeningsDto[] | UnprocessableEntityException> {
+    async getAllCurrentOpenings(): Promise<CurrentOpeningsByUserDTO | UnprocessableEntityException> {
         try {
             const currentOpeningsData = await this.currentOpeningsModel.find({}).exec();
-            return currentOpeningsData;
+            const currentOpenings:CurrentOpeningsByUserDTO = {
+                applicationInfo: currentOpeningsData,
+                updatedIdDetails: null,
+                createdDetails: null
+            }
+            if(currentOpeningsData.length > 0) {
+                const updatedByIds = currentOpeningsData.map(obj => obj.updatedBy);
+                currentOpenings.updatedIdDetails = await this.userService.getUsersByIds(updatedByIds);
+                const createdByIds = currentOpeningsData.map(obj => obj.createdBy);
+                currentOpenings.createdDetails = await this.userService.getUsersByIds(createdByIds);
+            }
+            return currentOpenings;
         } catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }

@@ -76,4 +76,14 @@ export class ScheduleController {
         })
     }
 
+    @Get('applications/:id')
+    async getScheduleByApplicationId(@Param('id') applicationId: string) {
+        return this.scheduleService.getScheduleByApplicationId(applicationId).then(res => {
+            return this.responseHandler.successReponseHandler('Get schedule by application id Successfull', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+
+
 }

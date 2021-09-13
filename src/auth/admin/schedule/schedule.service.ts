@@ -8,7 +8,8 @@ import { SubmitService } from '../submit/submit.service';
 import { TechnologyService } from '../technology/technology.service';
 import { CreateScheduleDto } from './schedule.dto';
 import { IScheduleDocument } from './schedule.schema';
-
+import { APPLICATION_STATUS } from './../../../shared/enums/app.properties';
+import { ApplicationsService } from './../applications/applications.service';
 @Injectable()
 export class ScheduleService {
     constructor(
@@ -16,7 +17,8 @@ export class ScheduleService {
         private currentOpeningsService: CurrentOpeningsService,
         private submitService: SubmitService,
         private questionsService: QuestionsService,
-        private technologyService: TechnologyService
+        private technologyService: TechnologyService,
+        private applicationService: ApplicationsService
 
     ) { }
 
@@ -38,6 +40,8 @@ export class ScheduleService {
             const submitInfo = await this.submitService.createSubmit({ userId: schedulePayload.candidateId, questions: formattedQuestions })
             await this.currentOpeningsService.incrementScheduledCount(schedulePayload.positionApplied)
             schedulePayload.submitId = submitInfo._id;
+
+            const applicationIdStatus = await this.applicationService.updateApplicationStatus(schedulePayload.applicationId, {status: APPLICATION_STATUS.SCHEDULED});
             const schedule = new this.scheduleModel(schedulePayload);
             return schedule.save();
         }

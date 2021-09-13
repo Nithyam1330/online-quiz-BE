@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Prop, SchemaFactory, Schema } from "@nestjs/mongoose";
 import {Document, Types, Schema as MongooseSchema} from 'mongoose'
 import * as uniqueValidators from 'mongoose-unique-validator'
@@ -48,6 +49,9 @@ export class ScheduleSchemaCreator {
     //In Minutes
     @Prop({required: true, min: 10, max: 180})
     assessmentDuration: number
+
+    @Prop({required: true})
+    applicationId: string;
 
 }
 

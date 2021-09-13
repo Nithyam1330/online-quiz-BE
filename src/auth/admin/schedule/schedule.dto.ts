@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Type } from "@nestjs/common";
 import { IsDefined, IsIn } from "class-validator";
 import { Schema } from "mongoose";
@@ -40,6 +41,8 @@ export class CreateScheduleDto {
     totalScore: number = null;
 
     @IsDefined()
-    assessmentDuration: number
+    assessmentDuration: number;
 
+    @IsDefined()
+    applicationId: string;
 }

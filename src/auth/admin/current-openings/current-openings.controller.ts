@@ -5,14 +5,14 @@ import { Body, Controller, Post, Get, Param, Put, Delete, UseGuards } from '@nes
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 
-@UseGuards(JwtAuthGuard)
 @Controller('current-openings')
 export class CurrentOpeningsController {
     constructor(
         private readonly responseHandler: ResponseHandlerService,
         private readonly currentOpeningsService: CurrentOpeningsService
     ) { }
-
+    
+    @UseGuards(JwtAuthGuard)
     @Post()
     async createCurrentOpenings(@Body() currentOpeningsPayload: CurrentOpeningsDto) {
         return this.currentOpeningsService.createNewOpenings(currentOpeningsPayload).then(res => {
@@ -31,6 +31,7 @@ export class CurrentOpeningsController {
         })
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getAllCurrentOpenings() {
         return this.currentOpeningsService.getAllCurrentOpenings().then(res => {
@@ -40,6 +41,7 @@ export class CurrentOpeningsController {
         })
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getCurrentOpeningById(@Param('id') currentOpeningsId: string) {
         return this.currentOpeningsService.getCurrentOpeningsByID(currentOpeningsId).then(res => {
@@ -49,6 +51,7 @@ export class CurrentOpeningsController {
         })
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put(':id')
     async updateCurrentOpenings(@Param('id') currentOpeningsId: string, @Body() currentOpeningsPayload: CurrentOpeningsDto) {
         return this.currentOpeningsService.updateCurrentOpeningsByID(currentOpeningsId, currentOpeningsPayload).then(res => {
@@ -58,6 +61,7 @@ export class CurrentOpeningsController {
         })
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put(':id/update-status')
     async updateStatusById(@Param('id') currentOpeningsId: string, @Body() status: FilterCurrentOpeningsByStatusDTO) {
         return this.currentOpeningsService.updateStatusById(currentOpeningsId, status).then(res => {
@@ -67,6 +71,7 @@ export class CurrentOpeningsController {
         })
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async deleteCurrentOpeningsById(@Param('id') currentOpeningsId: string) {
         return this.currentOpeningsService.deleteCurrentOpeningsById(currentOpeningsId).then(res => {

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { CreateScheduleDto } from './schedule.dto';
 import { ScheduleService } from './schedule.service';
 import { Body, Controller, Post, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
@@ -61,6 +62,15 @@ export class ScheduleController {
     async getAllSchedulesByUserId(@Param('id') id: string) {
         return this.scheduleService.getAllSchedulesByUserId(id).then(res => {
             return this.responseHandler.successReponseHandler('Schedule by user id Successfull', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+
+    @Put('')
+    async updateScheduleByApplicationId(@Body() schedulePayload: CreateScheduleDto) {
+        return this.scheduleService.updateScheduleByApplicationId(schedulePayload).then(res => {
+            return this.responseHandler.successReponseHandler('Update Schedule by application id Successfull', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);
         })

@@ -64,6 +64,7 @@ export class ScheduleService {
                 "submitId": 1,
                 "cutOff": 1,
                 "assessmentDuration": 1,
+                "applicationId": 1
             }).exec();
             return scheduleDetails;
         }
@@ -87,6 +88,14 @@ export class ScheduleService {
             throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
         }
         return scheduleDetails;
+    }
+
+    async updateScheduleByApplicationId(schedulePayload: CreateScheduleDto): Promise<CreateScheduleDto> {
+        const scheduleDetails = await this.scheduleModel.findOneAndUpdate({ applicationId: schedulePayload.applicationId, status:APPLICATION_STATUS.SCHEDULED.toLowerCase() }, schedulePayload).exec();
+        if (!scheduleDetails) {
+            throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
+        }
+        return schedulePayload;
     }
 
     async getScheduleById(id: string): Promise<any | NotFoundException> {

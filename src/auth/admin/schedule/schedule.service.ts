@@ -146,20 +146,7 @@ export class ScheduleService {
 
     async getScheduleByApplicationId(applicationId: string): Promise<any | NotFoundException> {
         try {            
-            const scheduleDetails = await this.scheduleModel.find({ applicationId: applicationId }).select({
-                "status": 1,
-                "technologyKeys": 1,
-                "_id": 1,
-                "startTime": 1,
-                "endTime": 1,
-                "positionApplied": 1,
-                "candidateId": 1,
-                "totalNoOfQuestions": 1,
-                "submitId": 1,
-                "cutOff": 1,
-                "assessmentDuration": 1,
-                "applicationId": 1
-            }).exec();
+            const scheduleDetails = await this.scheduleModel.find({ applicationId: applicationId }).exec();
             let technologykeys = []
             for (const schedule of scheduleDetails) {
                 technologykeys = [...technologykeys, ...schedule.technologyKeys]

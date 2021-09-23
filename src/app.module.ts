@@ -17,6 +17,7 @@ import { SharedModule } from './shared/shared.module';
 import { ScheduleModule } from './auth/admin/schedule/schedule.module';
 import { SubmitModule } from './auth/admin/submit/submit.module';
 import { ApplicationsModule } from './auth/admin/applications/applications.module';
+import { FeedbackModule } from './auth/admin/feedback/feedback.module';
 
 
 @Module({
@@ -32,6 +33,7 @@ import { ApplicationsModule } from './auth/admin/applications/applications.modul
     ScheduleModule,
     SubmitModule,
     ApplicationsModule,
+    FeedbackModule,
     // CategoryModule,
     // SubCategoryModule,
     MailerModule.forRoot({

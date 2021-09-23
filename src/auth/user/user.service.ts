@@ -140,4 +140,11 @@ export class UserService {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
+
+    async isValidUserId(id: string):Promise<void> {
+        const userDetails = await this.userModel.find({_id: id}).exec();
+        if(!userDetails){
+            throw new HttpException('No user found', HttpStatus.NOT_FOUND);
+        }
+    }
 }

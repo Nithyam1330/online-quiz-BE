@@ -14,6 +14,15 @@ export class QuestionsController {
         private responseHandler: ResponseHandlerService
     ) {}
 
+    @Post('bulk-upload')
+    async questionsBulkUpload(@Body() questionsPayload: CreateQuestionDto[]) {
+        return this.questionsService.questionsBulkUpload(questionsPayload).then(res => {
+            return this.responseHandler.successReponseHandler('Bulk Questions Inserted Successfully', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+
     @Post('')
     async createQuestions(@Body() questionsPayload: CreateQuestionDto) {
         return this.questionsService.createQuestions(questionsPayload).then(res => {

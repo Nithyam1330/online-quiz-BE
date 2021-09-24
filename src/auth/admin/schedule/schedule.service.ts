@@ -126,6 +126,7 @@ export class ScheduleService {
                 "submitId": 1,
                 "cutOff": 1,
                 "assessmentDuration": 1,
+                "applicationId": 1
             }).exec();
             let technologykeys = []
             for (const schedule of scheduleDetails) {

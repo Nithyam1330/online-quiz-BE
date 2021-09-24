@@ -21,9 +21,9 @@ export class SubmitController {
         })
     }
 
-    @Put('update-answers/:id')
-    async updateSchedule(@Param('id') id: string, @Body() schedulePayload: any) {
-        return this.submitService.updateSubmitAnswers(id, schedulePayload).then(res => {
+    @Put('update-answers/:submitId/:applicationID')
+    async updateSchedule(@Param('submitId') submitId: string,@Param('applicationID') applicationID: string, @Body() schedulePayload: any) {
+        return this.submitService.updateSubmitAnswers(submitId, applicationID, schedulePayload).then(res => {
             return this.responseHandler.successReponseHandler('Update answers by id Successfull', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);

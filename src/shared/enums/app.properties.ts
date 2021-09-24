@@ -21,7 +21,8 @@ export enum APPLICATION_STATUS {
     REJECTED = 'REJECTED',
     HIRED = 'HIRED',
     HOLD = 'HOLD',
-    SCHEDULED ='SCHEDULED'
+    SCHEDULED ='SCHEDULED',
+    SUBMITED = 'SUBMITED'
 }
 export type IUserRoles = typeof USER_ROLES[keyof typeof USER_ROLES];
 

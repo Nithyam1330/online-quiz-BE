@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { JwtAuthModule } from 'src/shared/services/jwt-auth/jwt-auth.module';
 import { SharedModule } from 'src/shared/shared.module';
@@ -6,14 +7,14 @@ import { QuestionsModule } from '../questions/questions.module';
 import { SubmitController } from './submit.controller';
 import { SubmitProviders } from './submit.provider';
 import { SubmitService } from './submit.service';
-
+import { ApplicationsModule } from './../applications/applications.module';
 @Module({
   providers: [
     SubmitService,
     ...SubmitProviders
   ],
   controllers: [SubmitController],
-  imports: [SharedModule,JwtAuthModule, CurrentOpeningsModule, QuestionsModule],
+  imports: [SharedModule,JwtAuthModule, CurrentOpeningsModule, QuestionsModule, ApplicationsModule],
   exports: [ SubmitService,
     ...SubmitProviders]
 })

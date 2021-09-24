@@ -6,12 +6,15 @@ import { CreateQuestionDto } from '../questions/questions.dto';
 import { QuestionsService } from '../questions/questions.service';
 import { CreateSubmitDto } from './submit.dto';
 import { ISubmitDocument } from './submit.schema';
+import { APPLICATION_STATUS } from 'src/shared/enums/app.properties';
+import { ApplicationsService } from './../applications/applications.service';
 
 @Injectable()
 export class SubmitService {
     constructor(
         @Inject(MODAL_ENUMS.SUBMIT) private readonly submitModel: Model<ISubmitDocument>,
-        private questionService: QuestionsService
+        private questionService: QuestionsService,
+        private applicationsService:ApplicationsService
 
     ) { }
 
@@ -26,14 +29,15 @@ export class SubmitService {
     }
 
 
-    async updateSubmitAnswers(id: string, questions: any): Promise<CreateSubmitDto | NotFoundException> {
-        const submitDetails = await this.submitModel.findById(id).exec();
+    async updateSubmitAnswers(submitId: string,applicationID: string, questions: any): Promise<CreateSubmitDto | NotFoundException> {
+        const submitDetails = await this.submitModel.findById(submitId).exec();
         if (submitDetails && submitDetails.questions) {
             const updatedQuestions = { ...submitDetails.questions, ...questions };
-            const scheduleDetails = await this.submitModel.findOneAndUpdate({ _id: id }, { questions: updatedQuestions }).exec();
+            const scheduleDetails = await this.submitModel.findOneAndUpdate({ _id: submitId }, { questions: updatedQuestions }).exec();
             if (!scheduleDetails) {
                 throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
             }
+            await this.applicationsService.updateApplicationStatus(applicationID, {status: APPLICATION_STATUS.SUBMITED});
             scheduleDetails.questions = updatedQuestions;
             return scheduleDetails;
         }

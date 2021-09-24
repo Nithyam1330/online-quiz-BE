@@ -87,5 +87,21 @@ export class ApplicationsService {
         }
         return applicationsData;
     }
+
+    async getAllApplicationsByIds(ids: any): Promise<ApplicationsDto[] | UnprocessableEntityException> {
+        try {
+            const applicationDetails = await this.applicationsModel.find({_id: {$in: ids}});
+            return applicationDetails;
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    async isValidApplicationId(id: string):Promise<void> {
+        const applicationDetails = await this.applicationsModel.findById(id).exec();
+        if(!applicationDetails ){
+            throw new HttpException('Application not found', HttpStatus.NOT_MODIFIED);
+        }
+    }
 }
 

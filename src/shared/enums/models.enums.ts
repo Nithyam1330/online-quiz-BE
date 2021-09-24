@@ -11,7 +11,8 @@ export const MODAL_ENUMS = {
     CURRENT_OPENINGS: 'currentOpenings',
     SCHEDULES: 'schedules',
     SUBMIT: 'submit',
-    APPLICATIONS: 'applications'
+    APPLICATIONS: 'applications',
+    FEEDBACK: 'feedback',
 }
 
 export const COLLECTION_NAMES = {
@@ -26,5 +27,6 @@ export const COLLECTION_NAMES = {
     CURRENT_OPENINGS: 'currentOpenings',
     SCHEDULES: 'schedules',
     SUBMIT: 'submit',
-    APPLICATIONS: 'applications'
+    APPLICATIONS: 'applications',
+    FEEDBACK: 'feedback',
 }

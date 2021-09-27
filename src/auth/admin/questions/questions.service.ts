@@ -13,10 +13,11 @@ export class QuestionsService {
 
     async questionsBulkUpload(questionsString: CreateQuestionDto[]): Promise<CreateQuestionDto[]| UnprocessableEntityException> {
         try {
-            let questionDetails = await this.questionsModel.insertMany(questionsString);
+            const questionDetails = await this.questionsModel.insertMany(questionsString);
             return questionDetails;
         }
         catch (e) {
+            console.log(e);
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }

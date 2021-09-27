@@ -16,7 +16,7 @@ export class QuestionsController {
 
     @Post('bulk-upload')
     async questionsBulkUpload(@Body() questionsPayload: BulkUploadDTO) {
-        return this.questionsService.questionsBulkUpload(JSON.parse(questionsPayload.bulkData) as CreateQuestionDto[]).then(res => {
+        return this.questionsService.questionsBulkUpload(questionsPayload.bulkData).then(res => {
             return this.responseHandler.successReponseHandler('Bulk Questions Inserted Successfully', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);

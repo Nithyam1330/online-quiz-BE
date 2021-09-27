@@ -24,8 +24,7 @@ export class CreateQuestionDto {
     updatedBy: string
 
 }
-
 export class BulkUploadDTO {
     @IsDefined()
-    bulkData: string;
+    bulkData: CreateQuestionDto[];
 }

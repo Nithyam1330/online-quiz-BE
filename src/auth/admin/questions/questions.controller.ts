@@ -3,7 +3,7 @@ import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/c
 import { Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
-import { CreateQuestionDto } from './questions.dto';
+import { CreateQuestionDto, BulkUploadDTO } from './questions.dto';
 import { QuestionsService } from './questions.service';
 
 @UseGuards(JwtAuthGuard)
@@ -15,8 +15,8 @@ export class QuestionsController {
     ) {}
 
     @Post('bulk-upload')
-    async questionsBulkUpload(@Body() questionsPayload: CreateQuestionDto[]) {
-        return this.questionsService.questionsBulkUpload(questionsPayload).then(res => {
+    async questionsBulkUpload(@Body() questionsPayload: BulkUploadDTO) {
+        return this.questionsService.questionsBulkUpload(JSON.parse(questionsPayload.bulkData) as CreateQuestionDto[]).then(res => {
             return this.responseHandler.successReponseHandler('Bulk Questions Inserted Successfully', res);
         }).catch((error: Error) => {
             return this.responseHandler.errorReponseHandler(error);

@@ -37,7 +37,7 @@ export class SubmitService {
             if (!scheduleDetails) {
                 throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
             }
-            await this.applicationsService.updateApplicationStatus(applicationID, {status: APPLICATION_STATUS.SUBMITED});
+            await this.applicationsService.updateApplicationStatus(applicationID, {status: APPLICATION_STATUS.SUBMITTED});
             scheduleDetails.questions = updatedQuestions;
             return scheduleDetails;
         }

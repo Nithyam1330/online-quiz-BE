@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MODAL_ENUMS } from 'src/shared/enums/models.enums';
 import { CreateQuestionDto } from '../questions/questions.dto';
@@ -8,13 +8,18 @@ import { CreateSubmitDto } from './submit.dto';
 import { ISubmitDocument } from './submit.schema';
 import { APPLICATION_STATUS } from 'src/shared/enums/app.properties';
 import { ApplicationsService } from './../applications/applications.service';
+import { IScheduleDocument } from './../schedule/schedule.schema';
+import { CreateScheduleDto } from '../schedule/schedule.dto';
+import { ApplicationStatusUpdateDTO } from './../applications/applications.dto';
+
 
 @Injectable()
 export class SubmitService {
     constructor(
         @Inject(MODAL_ENUMS.SUBMIT) private readonly submitModel: Model<ISubmitDocument>,
         private questionService: QuestionsService,
-        private applicationsService:ApplicationsService
+        private applicationsService:ApplicationsService,
+        @Inject(MODAL_ENUMS.SCHEDULES) private readonly scheduleModel: Model<IScheduleDocument>,
 
     ) { }
 
@@ -38,10 +43,19 @@ export class SubmitService {
                 throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
             }
             await this.applicationsService.updateApplicationStatus(applicationID, {status: APPLICATION_STATUS.SUBMITTED});
+            await this.updateScheduleStatusByApplicationId(applicationID, {status: APPLICATION_STATUS.SUBMITTED})
             scheduleDetails.questions = updatedQuestions;
             return scheduleDetails;
         }
         throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
+    }
+
+    async updateScheduleStatusByApplicationId(applicationId: string, applicationStatusdto: ApplicationStatusUpdateDTO): Promise<CreateScheduleDto | UnprocessableEntityException> {
+        const scheduleData = await this.scheduleModel.findOneAndUpdate({_id: applicationId}, {status: applicationStatusdto.status});
+        if (!scheduleData) {
+            throw new HttpException('Unable to update schedule status', HttpStatus.NOT_MODIFIED);
+        }
+        return scheduleData;
     }
 
     async getSubmitById(id: string): Promise<CreateQuestionDto[]> {

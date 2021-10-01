@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 
 import { Connection } from "mongoose";
 import { MODAL_ENUMS, COLLECTION_NAMES } from "src/shared/enums/models.enums";

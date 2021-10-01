@@ -51,7 +51,7 @@ export class SubmitService {
     }
 
     async updateScheduleStatusByApplicationId(applicationId: string, applicationStatusdto: ApplicationStatusUpdateDTO): Promise<CreateScheduleDto | UnprocessableEntityException> {
-        const scheduleData = await this.scheduleModel.findOneAndUpdate({_id: applicationId}, {status: applicationStatusdto.status});
+        const scheduleData = await this.scheduleModel.findOneAndUpdate({applicationId: applicationId}, {status: applicationStatusdto.status});
         if (!scheduleData) {
             throw new HttpException('Unable to update schedule status', HttpStatus.NOT_MODIFIED);
         }

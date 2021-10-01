@@ -11,6 +11,17 @@ export class QuestionsService {
         @Inject(MODAL_ENUMS.QUESTIONS) private readonly questionsModel: Model<IQuestionDocument>,
     ) { }
 
+    async questionsBulkUpload(questionsString: CreateQuestionDto[]): Promise<CreateQuestionDto[]| UnprocessableEntityException> {
+        try {
+            const questionDetails = await this.questionsModel.insertMany(questionsString);
+            return questionDetails;
+        }
+        catch (e) {
+            console.log(e);
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
     async createQuestions(questionsPayload: CreateQuestionDto): Promise<CreateQuestionDto | UnprocessableEntityException> {
         try {
             const question = new this.questionsModel(questionsPayload);

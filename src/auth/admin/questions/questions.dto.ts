@@ -1,7 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Type } from "@nestjs/common";
-import { IsDefined, IsIn } from "class-validator";
-import { Schema } from "mongoose";
+import { IsDefined } from "class-validator";
 import { IOption } from "./questions.schema";
 
 export class CreateQuestionDto {
@@ -25,4 +23,8 @@ export class CreateQuestionDto {
     @IsDefined()
     updatedBy: string
 
+}
+export class BulkUploadDTO {
+    @IsDefined()
+    bulkData: CreateQuestionDto[];
 }

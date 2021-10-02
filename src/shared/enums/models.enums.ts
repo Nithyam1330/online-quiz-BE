@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const MODAL_ENUMS = {
     ROLE_MODEL: 'ROLE_MODEL',
     DATABASE_CONNECTION: 'DATABASE_CONNECTION',
@@ -13,6 +14,7 @@ export const MODAL_ENUMS = {
     SUBMIT: 'submit',
     APPLICATIONS: 'applications',
     FEEDBACK: 'feedback',
+    APPLICATION_IMAGES: 'applicationImages'
 }
 
 export const COLLECTION_NAMES = {
@@ -29,4 +31,5 @@ export const COLLECTION_NAMES = {
     SUBMIT: 'submit',
     APPLICATIONS: 'applications',
     FEEDBACK: 'feedback',
+    APPLICATION_IMAGES: 'applicationImages'
 }

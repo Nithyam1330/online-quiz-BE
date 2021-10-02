@@ -80,6 +80,14 @@ export class ApplicationsService {
         return applicationsData;
     }
 
+    async getApplicationByIDAndStatus(applicationId: string, applicationStatusdto: ApplicationStatusUpdateDTO): Promise<ApplicationsDto | UnprocessableEntityException> {
+        const applicationsData = await this.applicationsModel.findOne({_id: applicationId}, {status: applicationStatusdto.status});
+        if (!applicationsData) {
+            throw new HttpException('Unable to update', HttpStatus.NOT_MODIFIED);
+        }
+        return applicationsData;
+    }
+
     async getAllApplicationByApplicationId(applicationId: string): Promise<ApplicationsDto[] | UnprocessableEntityException> {
         const applicationsData = await this.applicationsModel.find({ _id: applicationId }).exec();
         if (!applicationsData) {

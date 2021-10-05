@@ -18,6 +18,8 @@ import { ApplicationsModule } from './auth/admin/applications/applications.modul
 import { FeedbackModule } from './auth/admin/feedback/feedback.module';
 import { AppController } from './app.controller';
 import { ApplicationImageModule } from './auth/application-images/application-images.module';
+import { ZoomSignatureService } from './shared/services/zoom-signature/zoom-signature.service';
+import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
@@ -37,9 +39,10 @@ import { ApplicationImageModule } from './auth/application-images/application-im
     ApplicationImageModule,
     MailerModule.forRoot({
       transport: SMTP_CONFIG
-    })
+    }),
+    ConfigModule.forRoot()
   ],
   controllers: [AppController],
-  providers: [AppService, ResponseHandlerService],
+  providers: [AppService, ResponseHandlerService, ZoomSignatureService],
 })
 export class AppModule {}

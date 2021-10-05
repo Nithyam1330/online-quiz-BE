@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { SECRET_KEY_JSON_WEB_TOKEN } from 'src/shared/enums/app.properties';

@@ -10,6 +10,7 @@ import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { v4 as uuidv4 } from 'uuid';
 import { RoleGuard } from './../../shared/services/role-guard/role.guard';
 import { SetMetadata } from '@nestjs/common';
+import { USER_ROLES } from './../../shared/enums/app.properties';
 
 @Controller('user')
 export class UserController {
@@ -122,7 +123,7 @@ export class UserController {
         })
     }
 
-    @SetMetadata('roles', ['ADMIN'])
+    @SetMetadata('roles', [USER_ROLES.ADMIN])
     @UseGuards(JwtAuthGuard)
     @UseGuards(RoleGuard)
     @Put('admin/update-password/:id')

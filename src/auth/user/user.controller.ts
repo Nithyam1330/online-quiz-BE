@@ -8,6 +8,9 @@ import { EmailSenderService } from 'src/shared/services/email-sender/email-sende
 import { IUserDocument } from './user.schema';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
 import { v4 as uuidv4 } from 'uuid';
+import { RoleGuard } from './../../shared/services/role-guard/role.guard';
+import { SetMetadata } from '@nestjs/common';
+
 @Controller('user')
 export class UserController {
     constructor(
@@ -119,7 +122,9 @@ export class UserController {
         })
     }
 
+    @SetMetadata('roles', ['admin'])
     @UseGuards(JwtAuthGuard)
+    @UseGuards(RoleGuard)
     @Put('admin/update-password/:id')
     async updateUserPasswordByAdmin(@Body() passwordBody:UpdateUserPasswordByAdminDTO, @Param('id') userId: string) {
         return this.userService.updateUserPasswordByAdmin(passwordBody,userId).then((res: UpdateUserPasswordByAdminDTO) => {

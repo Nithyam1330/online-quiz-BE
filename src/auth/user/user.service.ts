@@ -110,7 +110,7 @@ export class UserService {
             if (!isPasswordMatches) {
                 throw new HttpException('Invalid User credentials', HttpStatus.UNAUTHORIZED);
             }
-            const authToken = await this.jwtAuthService.generateJWT(loginPayload);
+            const authToken = await this.jwtAuthService.generateJWT(loginPayload, userDetails[0].role);
             const userWithAuthToken = { ...userDetails[0].toObject(), ...authToken };
             return userWithAuthToken;
         } catch (e) {

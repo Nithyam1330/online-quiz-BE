@@ -60,6 +60,11 @@ export class LoginDTO {
     password: string;
 }
 
+export class UpdateUserPasswordByAdminDTO {
+    @IsDefined()
+    password: string;
+}
+
 
 export class UpdateUsersDto {
 

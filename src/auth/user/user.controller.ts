@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
-import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto, UpdateUsersDto } from './user.dto';
+import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto, UpdateUsersDto, UpdateUserPasswordByAdminDTO } from './user.dto';
 import { UserService } from './user.service';
 import { EncryptDecryptService } from 'src/shared/services/encrypt-decrypt/encrypt-decrypt.service';
 import { EmailSenderService } from 'src/shared/services/email-sender/email-sender.service';
@@ -118,4 +118,15 @@ export class UserController {
             return this.responseHandler.errorReponseHandler(error);
         })
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Put('admin/update-password/:id')
+    async updateUserPasswordByAdmin(@Body() passwordBody:UpdateUserPasswordByAdminDTO, @Param('id') userId: string) {
+        return this.userService.updateUserPasswordByAdmin(passwordBody,userId).then((res: UpdateUserPasswordByAdminDTO) => {
+            return this.responseHandler.successReponseHandler('Update password of User is succesful', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+    
 }

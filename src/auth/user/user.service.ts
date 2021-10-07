@@ -6,6 +6,8 @@ import { JwtAuthService } from 'src/shared/services/jwt-auth/jwt-auth.service';
 import { Utils } from 'src/shared/services/Utils/Utils';
 import { ForgotPasswordDto, LoginDTO, ResetPasswordDTO, UsersDto, UpdateUsersDto } from './user.dto';
 import { IUserDocument } from './user.schema';
+import { UpdateUserPasswordByAdminDTO } from './user.dto';
+
 
 
 @Injectable()
@@ -64,7 +66,6 @@ export class UserService {
         } catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
     }
 
     async resetPassword(resetPayload: ResetPasswordDTO, userId: string): Promise<IUserDocument | UnprocessableEntityException> {
@@ -146,5 +147,19 @@ export class UserService {
         if(!userDetails){
             throw new HttpException('No user found', HttpStatus.NOT_FOUND);
         }
+    }
+
+    async updateUserPasswordByAdmin(recordPayload: UpdateUserPasswordByAdminDTO, updateId: string): Promise<UpdateUserPasswordByAdminDTO | UnprocessableEntityException> {
+        try {
+            const userDetails = await this.userModel.findByIdAndUpdate({ _id: updateId }, {password: recordPayload.password});
+            if (!userDetails) {
+                throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
+            }
+            recordPayload['password'] = null;
+            return recordPayload;
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
     }
 }

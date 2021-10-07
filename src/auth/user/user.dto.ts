@@ -63,6 +63,9 @@ export class LoginDTO {
 export class UpdateUserPasswordByAdminDTO {
     @IsDefined()
     password: string;
+
+    @IsDefined()
+    confirmPassword: string;
 }
 
 

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Error } from 'mongoose';
 import { HTTP_ERROR_TYPES, MONGO_ERROR_TYPES } from 'src/shared/enums/mongodb.errors';
@@ -23,6 +24,9 @@ export class ResponseHandlerService {
         switch (status) {
             case HttpStatus.NOT_FOUND: {
                 return MONGO_ERROR_TYPES.DocumentNotFoundError
+            }
+            case HttpStatus.BAD_REQUEST: {
+                return MONGO_ERROR_TYPES.MongoError
             }
             case HttpStatus.NOT_MODIFIED: {
                 return MONGO_ERROR_TYPES.OverwriteModelError

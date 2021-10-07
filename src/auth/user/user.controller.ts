@@ -125,6 +125,7 @@ export class UserController {
         return this.userService.updateUserPasswordByAdmin(passwordBody,userId).then((res: UpdateUserPasswordByAdminDTO) => {
             return this.responseHandler.successReponseHandler('Update password of User is succesful', res);
         }).catch((error: Error) => {
+            // console.log(error);
             return this.responseHandler.errorReponseHandler(error);
         })
     }

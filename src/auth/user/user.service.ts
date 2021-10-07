@@ -150,16 +150,15 @@ export class UserService {
     }
 
     async updateUserPasswordByAdmin(recordPayload: UpdateUserPasswordByAdminDTO, updateId: string): Promise<UpdateUserPasswordByAdminDTO | UnprocessableEntityException> {
-        try {
+            if(recordPayload.password !== recordPayload.confirmPassword) {
+                throw new HttpException('Both Password and confirm password should be same', HttpStatus.BAD_REQUEST);
+            }
             const userDetails = await this.userModel.findByIdAndUpdate({ _id: updateId }, {password: recordPayload.password});
             if (!userDetails) {
                 throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
             }
-            recordPayload['password'] = null;
+            recordPayload.password = null;
+            recordPayload.confirmPassword = null;
             return recordPayload;
-        } catch (e) {
-            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-
     }
 }

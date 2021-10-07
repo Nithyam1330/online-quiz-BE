@@ -122,7 +122,7 @@ export class UserController {
         })
     }
 
-    @SetMetadata('roles', ['admin'])
+    @SetMetadata('roles', ['ADMIN'])
     @UseGuards(JwtAuthGuard)
     @UseGuards(RoleGuard)
     @Put('admin/update-password/:id')

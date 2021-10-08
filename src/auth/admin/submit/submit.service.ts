@@ -70,4 +70,17 @@ export class SubmitService {
         return updatedQuestions;
     }
 
+    async getSubmitQuestionsById(id: string): Promise<CreateQuestionDto[]> {
+        const submitData = await this.submitModel.findById(id).exec();
+        if(submitData && submitData.questions) {
+            const questions = await this.questionService.getMultipleQuestionsWithAnswersByIds(Object.keys(submitData.questions))
+            const updatedQuestions = [];
+            for (const question of questions) {
+                updatedQuestions.push({ yourAnswer: submitData.questions[question._id],  question: question.question, _id: question._id,answerKey: question.answerKey})
+            }
+            return updatedQuestions;
+        }
+        throw new HttpException(`Invalid Submit Id`, HttpStatus.NOT_FOUND);
+    }
+
 }

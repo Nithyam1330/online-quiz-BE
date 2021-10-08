@@ -10,6 +10,7 @@ import { CreateScheduleDto } from './schedule.dto';
 import { IScheduleDocument } from './schedule.schema';
 import { APPLICATION_STATUS } from './../../../shared/enums/app.properties';
 import { ApplicationsService } from './../applications/applications.service';
+import { json } from 'express';
 @Injectable()
 export class ScheduleService {
     constructor(
@@ -162,6 +163,46 @@ export class ScheduleService {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
+    }
+
+    async getScheduleStats(applicationId: string): Promise<any> {
+            let scheduleResponse= await this.getScheduleByApplicationId(applicationId); 
+            if(scheduleResponse && scheduleResponse.scheduleDetails && scheduleResponse.scheduleDetails[0])  {
+                let scheduleDetails = scheduleResponse.scheduleDetails[0];
+                if(scheduleDetails.status !== APPLICATION_STATUS.SUBMITTED) {
+                     throw new HttpException(`Application not submitted yet!`, HttpStatus.NOT_FOUND);
+                }
+                let questionDetails = await this.submitService.getSubmitQuestionsById(scheduleDetails.submitId);
+                if(!questionDetails) {
+                    throw new HttpException('Somethig went wrong', HttpStatus.NOT_FOUND)
+                }
+                let totalNoOfQues = scheduleDetails.totalNoOfQuestions;
+                let cutOff = scheduleDetails.cutOff;
+                let notAnswered = totalNoOfQues - questionDetails.length;
+                let correct = 0;
+                let wrong = 0;
+                for(let question of questionDetails) {
+                    //@ts-ignore
+                    if(question.answerKey == question.yourAnswer) {
+                        correct = correct + 1;
+                    //@ts-ignore
+                    } else if(question.yourAnswer === null) {
+                        notAnswered = notAnswered +1;
+                    } else {
+                        wrong = wrong +1;
+                    }
+                }
+                return {
+                    applicationId,
+                    correct,
+                    wrong,
+                    notAnswered,
+                    cutOff,
+                    totalNoOfQues
+                }
+            } 
+            throw new HttpException('Schedule with application id not found', HttpStatus.NOT_FOUND);
+            
     }
 
 }

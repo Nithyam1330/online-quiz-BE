@@ -91,5 +91,13 @@ export class ScheduleController {
         })
     }
 
+    @Get('stats/:id')
+    async getScheduleStatsByApplicationId(@Param('id') applicationId: string) {
+        return this.scheduleService.getScheduleStats(applicationId).then(res => {
+            return this.responseHandler.successReponseHandler('Get quiz stats by application id Successfull', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
 
 }

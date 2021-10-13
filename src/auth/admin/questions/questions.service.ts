@@ -79,6 +79,14 @@ export class QuestionsService {
         return questions;
     }
 
+    async getMultipleQuestionsWithAnswersByIds(questionIds: string[]): Promise<CreateQuestionDto[]> {
+        const questions = await this.questionsModel.find({ '_id': { $in: questionIds } }, { question: 1, _id: 1, answerKey:1 })
+        if (!questions) {
+            throw new HttpException('Questions not found', HttpStatus.NOT_FOUND);
+        }
+        return questions;
+    }
+
     async getQuestionById(id: string): Promise<CreateQuestionDto | NotFoundException> {
         const questionDetails = await this.questionsModel.findOne({ _id: id}).exec();
         if (!questionDetails) {

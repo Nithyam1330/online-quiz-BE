@@ -10,6 +10,7 @@ import { CreateScheduleDto } from './schedule.dto';
 import { IScheduleDocument } from './schedule.schema';
 import { APPLICATION_STATUS } from './../../../shared/enums/app.properties';
 import { ApplicationsService } from './../applications/applications.service';
+import { UserService } from 'src/auth/user/user.service';
 @Injectable()
 export class ScheduleService {
     constructor(
@@ -18,7 +19,8 @@ export class ScheduleService {
         private submitService: SubmitService,
         private questionsService: QuestionsService,
         private technologyService: TechnologyService,
-        private applicationService: ApplicationsService
+        private applicationService: ApplicationsService,
+        private usersService: UserService
 
     ) { }
 
@@ -41,7 +43,7 @@ export class ScheduleService {
             await this.currentOpeningsService.incrementScheduledCount(schedulePayload.positionApplied)
             schedulePayload.submitId = submitInfo._id;
 
-            const applicationIdStatus = await this.applicationService.updateApplicationStatus(schedulePayload.applicationId, {status: APPLICATION_STATUS.SCHEDULED});
+            const applicationIdStatus = await this.applicationService.updateApplicationStatus(schedulePayload.applicationId, { status: APPLICATION_STATUS.SCHEDULED });
             const schedule = new this.scheduleModel(schedulePayload);
             return schedule.save();
         }
@@ -50,7 +52,7 @@ export class ScheduleService {
         }
     }
 
-    async getAllSchedules(): Promise<CreateScheduleDto[] | NotFoundException> {
+    async getAllSchedules(): Promise<any | NotFoundException> {
         try {
             const scheduleDetails = await this.scheduleModel.find().select({
                 "status": 1,
@@ -66,7 +68,16 @@ export class ScheduleService {
                 "assessmentDuration": 1,
                 "applicationId": 1
             }).exec();
-            return scheduleDetails;
+            const userIds = scheduleDetails.map(obj => obj.candidateId);
+            const users = await this.usersService.getUsersByIds(userIds);
+            const positionAppliedIds = scheduleDetails.map(obj => obj.positionApplied);
+            const openings = await this.currentOpeningsService.getCurrentOpeningsByIDList(positionAppliedIds);
+            const payload = {
+                scheduleInfo: scheduleDetails,
+                user_details: users,
+                postion_details: openings
+            }
+            return payload;
         }
         catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -91,7 +102,7 @@ export class ScheduleService {
     }
 
     async updateScheduleByApplicationId(schedulePayload: CreateScheduleDto): Promise<CreateScheduleDto> {
-        const scheduleDetails = await this.scheduleModel.findOneAndUpdate({ applicationId: schedulePayload.applicationId, status:APPLICATION_STATUS.SCHEDULED.toLowerCase() }, schedulePayload).exec();
+        const scheduleDetails = await this.scheduleModel.findOneAndUpdate({ applicationId: schedulePayload.applicationId, status: APPLICATION_STATUS.SCHEDULED.toLowerCase() }, schedulePayload).exec();
         if (!scheduleDetails) {
             throw new HttpException('Nothing has changed', HttpStatus.NOT_MODIFIED);
         }
@@ -146,7 +157,7 @@ export class ScheduleService {
 
 
     async getScheduleByApplicationId(applicationId: string): Promise<any | NotFoundException> {
-        try {            
+        try {
             const scheduleDetails = await this.scheduleModel.find({ applicationId: applicationId }).exec();
             let technologykeys = []
             for (const schedule of scheduleDetails) {

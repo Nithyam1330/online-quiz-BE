@@ -33,13 +33,13 @@ export class ApplicationsService {
 
     async getAllApplications(): Promise<any | UnprocessableEntityException> {
         const applicationsData = await this.applicationsModel.find({}).exec();
+        if (!applicationsData) {
+            throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
+        }
         const openingIds = applicationsData.map(obj => obj.currentOpeningId);
         const openings = await this.currentopeningsService.getCurrentOpeningsByIDList(openingIds);
         const userIds = applicationsData.map(obj => obj.userId);
         const users = await this.usersService.getUsersByIds(userIds);
-        if (!applicationsData) {
-            throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
-        }
        const payload = {
            applicationInfo: applicationsData,
            user_details:users,

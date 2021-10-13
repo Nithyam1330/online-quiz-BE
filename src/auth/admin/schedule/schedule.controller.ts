@@ -1,9 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { CreateScheduleDto } from './schedule.dto';
 import { ScheduleService } from './schedule.service';
-import { Body, Controller, Post, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, Put, Delete, UseGuards, SetMetadata } from '@nestjs/common';
 import { ResponseHandlerService } from 'src/shared/services/response-handler/response-handler.service';
 import { JwtAuthGuard } from 'src/shared/services/jwt-auth/jwt-authguard';
+import { USER_ROLES } from 'src/shared/enums/app.properties';
+import { RoleGuard } from 'src/shared/services/role-guard/role.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('schedules')
@@ -13,6 +15,8 @@ export class ScheduleController {
         private readonly scheduleService: ScheduleService,
     ) { }
 
+    @SetMetadata('roles', [USER_ROLES.ADMIN])
+    @UseGuards(RoleGuard)
     @Post()
     async createSchedule(@Body() schedulePayload: CreateScheduleDto) {
         return this.scheduleService.createSchedule(schedulePayload).then(res => {
@@ -22,6 +26,8 @@ export class ScheduleController {
         })
     }
 
+    @SetMetadata('roles', [USER_ROLES.ADMIN])
+    @UseGuards(RoleGuard)
     @Get()
     async getAllSchedules() {
         return this.scheduleService.getAllSchedules().then(res => {

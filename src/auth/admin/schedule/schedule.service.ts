@@ -27,7 +27,9 @@ export class ScheduleService {
 
     async createSchedule(schedulePayload: CreateScheduleDto): Promise<CreateScheduleDto> {
         try {
-            const technologiesLength = schedulePayload.technologyKeys.length;
+            const postion_details = await this.currentOpeningsService.getCurrentOpeningsByID(schedulePayload.positionApplied);
+            if(postion_details) {
+                const technologiesLength = schedulePayload.technologyKeys.length;
             const noOfQuestions = Math.floor(schedulePayload.totalNoOfQuestions / technologiesLength);
             const remaining = schedulePayload.totalNoOfQuestions - (noOfQuestions * technologiesLength);
             let questions = [];
@@ -47,6 +49,10 @@ export class ScheduleService {
             const applicationIdStatus = await this.applicationService.updateApplicationStatus(schedulePayload.applicationId, { status: APPLICATION_STATUS.SCHEDULED });
             const schedule = new this.scheduleModel(schedulePayload);
             return schedule.save();
+            } else {
+                throw new HttpException(`Postion Applied does not exist... Please try again`, HttpStatus.NOT_FOUND);
+
+            }
         }
         catch (e) {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);

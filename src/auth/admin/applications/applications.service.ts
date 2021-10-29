@@ -48,20 +48,41 @@ export class ApplicationsService {
         return payload;
     }
 
-    async getAllApplicationByUserId(userId: string): Promise<ApplicationsDto[] | UnprocessableEntityException> {
+    async getAllApplicationByUserId(userId: string): Promise<any | UnprocessableEntityException> {
         const applicationsData = await this.applicationsModel.find({ userId: userId }).exec();
         if (!applicationsData) {
             throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
         }
-        return applicationsData;
+        const openingIds = applicationsData.map(obj => obj.currentOpeningId);
+        const openings = await this.currentopeningsService.getCurrentOpeningsByIDList(openingIds);
+        const userIds = applicationsData.map(obj => obj.userId);
+        const users = await this.usersService.getUsersByIds(userIds);
+    
+        const payload = {
+            applicationInfo: applicationsData,
+            user_details:users,
+            opening_details: openings
+        }
+        return payload;
     }
 
-    async getAllApplicationByOpening(openingId: string): Promise<ApplicationsDto[] | UnprocessableEntityException> {
+    async getAllApplicationByOpening(openingId: string): Promise<any | UnprocessableEntityException> {
         const applicationsData = await this.applicationsModel.find({ currentOpeningId: openingId }).exec();
+
         if (!applicationsData) {
             throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
         }
-        return applicationsData;
+        const openingIds = applicationsData.map(obj => obj.currentOpeningId);
+        const openings = await this.currentopeningsService.getCurrentOpeningsByIDList(openingIds);
+        const userIds = applicationsData.map(obj => obj.userId);
+        const users = await this.usersService.getUsersByIds(userIds);
+    
+        const payload = {
+            applicationInfo: applicationsData,
+            user_details:users,
+            opening_details: openings
+        }
+        return payload;
     }
 
     async deleteApplication(applicationId: string): Promise<ApplicationsDto | NotFoundException | UnprocessableEntityException> {

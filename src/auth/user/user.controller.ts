@@ -47,6 +47,16 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get()
+    async getAllUsers() {
+        return this.userService.getAllUsers().then((res: IUserDocument[])=>{
+            return this.responseHandler.successReponseHandler('Get All users successful', res)
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getUserByUserID(@Param('id') userId: string) {
         return this.userService.getUserByUserID(userId).then((res: IUserDocument) => {

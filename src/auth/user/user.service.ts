@@ -30,6 +30,22 @@ export class UserService {
         }
     }
 
+    async getAllUsers(): Promise<IUserDocument[] | UnprocessableEntityException> {
+        try {
+            let userDetails = this.userModel.find().select({
+                skills:1,
+                _id: 1,
+                email: 1,
+                username: 1,
+                mobileNumber: 1,
+                experience: 1
+            }).exec();
+            return userDetails;
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        } 
+    }
+
     async getUserByUserID(userId: string): Promise<IUserDocument | UnprocessableEntityException> {
         try {
             const userDetails = this.userModel.findById(userId).select('-password');

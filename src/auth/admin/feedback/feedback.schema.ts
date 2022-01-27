@@ -15,7 +15,7 @@ export class FeedbackSchemaCreator {
     @Prop({required: true,min: 1, max:5})
     starRating: number
 
-    @Prop({required: true})
+    @Prop({required: false})
     feedBack: string
 }
 

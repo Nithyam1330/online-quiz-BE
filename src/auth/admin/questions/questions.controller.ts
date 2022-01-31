@@ -67,4 +67,13 @@ export class QuestionsController {
             return this.responseHandler.errorReponseHandler(error);
         })
     }
+
+    @Get('/technology/:technologyKey')
+    async getQuestionBytechnology(@Param('technologyKey') technologyKey: string) {      
+        return this.questionsService.getQuestionBytechnologyKey(technologyKey).then(res => {
+            return this.responseHandler.successReponseHandler('Get Question by Technology successful', res);
+        }).catch((error: Error) => {
+            return this.responseHandler.errorReponseHandler(error);
+        })
+    }
 }

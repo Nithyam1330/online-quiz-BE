@@ -87,7 +87,6 @@ export class CurrentOpeningsService {
     }
 
     async getCurrentOpeningsByID(id: string): Promise<CurrentOpeningsDto | UnprocessableEntityException> {
-        await this.checkCurrentOpeningWithActiveStatus(id);
         try {
             const currentOpeningsData = await this.currentOpeningsModel.findById(id).exec();
             return currentOpeningsData;

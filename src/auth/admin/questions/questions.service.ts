@@ -94,4 +94,12 @@ export class QuestionsService {
         }
         return questionDetails;
     }
+
+    async getQuestionBytechnologyKey(technology: string): Promise<CreateQuestionDto | NotFoundException> {
+        const questionDetails: any = await this.questionsModel.find({ technologyKey: technology }).exec();
+        if (!questionDetails) {
+            throw new HttpException('Nothing found', HttpStatus.NOT_FOUND);
+        }
+        return questionDetails;
+    }
 }

@@ -7,7 +7,7 @@ import { ITechnologyDocument } from './technology.schema';
 @Injectable()
 export class TechnologyService {
     constructor(
-        @Inject(MODAL_ENUMS.TECHNOLOGIES) private readonly technologyModel: Model<ITechnologyDocument>,
+        @Inject(MODAL_ENUMS.TECHNOLOGIES) private readonly technologyModel: Model<ITechnologyDocument>        
     ) { }
 
     async createTechnology(technologyPayload: CreateTechnologyDto): Promise<CreateTechnologyDto | UnprocessableEntityException> {
@@ -41,6 +41,13 @@ export class TechnologyService {
     }
 
     async getTechnologyById(technologyId: string): Promise<ITechnologyDocument[] | NotFoundException | UnprocessableEntityException> {
+        const result: any = await this.technologyModel.findOne({ _id: technologyId }).exec();
+            return result;
+        // return this.getCurrentOpeningsByKey(result.technologyKey);
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    async getTechnologyByKey(technologyId: string): Promise<ITechnologyDocument[] | NotFoundException | UnprocessableEntityException> {
         const result = await this.technologyModel.find({ technologyKey: technologyId }).select({ '_id': 1, 'name': 1, 'technologyKey': 1 }).exec();
         if (result && result.length) {
             return result;
@@ -56,7 +63,6 @@ export class TechnologyService {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
-
 
 
 }

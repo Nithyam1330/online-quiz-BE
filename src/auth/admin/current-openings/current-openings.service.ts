@@ -186,4 +186,17 @@ export class CurrentOpeningsService {
             throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
+
+    async getCurrentOpeningsByKey(technologyKey: any){
+        
+        try {
+            const currentOpeningsData = await this.currentOpeningsModel.find({technologyKeys: [technologyKey]});
+            return currentOpeningsData;
+        } catch (e) {
+            throw new HttpException(`Something went wrong ... Please try again`, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+   
+
 }
